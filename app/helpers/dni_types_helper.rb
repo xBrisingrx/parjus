@@ -1,0 +1,2 @@
+module DniTypesHelper
+end

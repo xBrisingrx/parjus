@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Dni Types</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Active</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @dni_types.each do |dni_type| %>
+      <tr>
+        <td><%= dni_type.name %></td>
+        <td><%= dni_type.description %></td>
+        <td><%= dni_type.active %></td>
+        <td><%= link_to 'Show', dni_type %></td>
+        <td><%= link_to 'Edit', edit_dni_type_path(dni_type) %></td>
+        <td><%= link_to 'Destroy', dni_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Dni Type', new_dni_type_path %>

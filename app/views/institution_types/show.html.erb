@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @institution_type.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @institution_type.description %>
+</p>
+
+<p>
+  <strong>Active:</strong>
+  <%= @institution_type.active %>
+</p>
+
+<%= link_to 'Edit', edit_institution_type_path(@institution_type) %> |
+<%= link_to 'Back', institution_types_path %>

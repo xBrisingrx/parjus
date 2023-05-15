@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @dni_type.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @dni_type.description %>
+</p>
+
+<p>
+  <strong>Active:</strong>
+  <%= @dni_type.active %>
+</p>
+
+<%= link_to 'Edit', edit_dni_type_path(@dni_type) %> |
+<%= link_to 'Back', dni_types_path %>
