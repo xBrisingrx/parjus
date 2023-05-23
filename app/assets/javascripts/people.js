@@ -13,6 +13,7 @@ $(document).ready(function(){
       {'data': 'genre'},
       {'data': 'dni_type'},
 			{'data': 'number'},
+      {'data': 'age'},
 			{'data': 'direction'},
 			{'data': 'neighborhood'},
       {'data': 'actions'}

@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Table:</strong>
+  <%= @tables_political_party.table %>
+</p>
+
+<p>
+  <strong>Politic party:</strong>
+  <%= @tables_political_party.politic_party %>
+</p>
+
+<p>
+  <strong>Active:</strong>
+  <%= @tables_political_party.active %>
+</p>
+
+<%= link_to 'Edit', edit_tables_political_party_path(@tables_political_party) %> |
+<%= link_to 'Back', tables_political_parties_path %>

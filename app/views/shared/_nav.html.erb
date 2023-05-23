@@ -22,17 +22,25 @@
             <div class="collapse navbar-collapse align-items-center flex-sm-row g-pt-10 " id="navBar">
               <ul class="navbar-nav mr-auto text-uppercase g-font-weight-600 u-main-nav-v5 u-sub-menu-v1">
                 <li class="nav-item hs-has-sub-menu g-mx-20--lg g-mb-5 g-mb-0--lg"> 
-                  <%= link_to 'Example', '#', class: 'nav-link', id: 'nav-example', 
+                  <%= link_to 'Afiliados', people_path, class: 'nav-link', id: 'nav-example', 
                     aria: { haspopup: "true", expanded: 'false', controls: 'nav-submenu-1' } %>
                   <!-- Submenu personas -->
                   <ul class="hs-sub-menu list-unstyled g-mt-20--lg g-mt-10--lg--scrolling" id="nav-submenu-example" aria-labelledby="nav-example">
                     <li><%= link_to 'Example', '#' %></li>
                   </ul>
                 </li>
+                <li class="nav-item g-mx-20--lg g-mb-5 g-mb-0--lg"> 
+                  <%= link_to 'Sedes', headquarters_path, class: 'nav-link' %>
+                </li>
+                <li class="nav-item g-mx-20--lg g-mb-5 g-mb-0--lg"> 
+                  <%= link_to 'Partidos', political_parties_path, class: 'nav-link' %>
+                </li>
+                <li class="nav-item g-mx-20--lg g-mb-5 g-mb-0--lg"> 
+                  <%= link_to 'Instituciones', institutions_path, class: 'nav-link' %>
+                </li>
               </ul>
             </div>
             <!-- End Navigation -->
-
             <div class="col-auto d-flex g-pt-5 g-pt-0--sm g-pl-10 g-pl-20--sm">
             <div class="g-pos-rel g-px-10--lg hs-has-sub-menu">
               <a id="profileMenuInvoker" class="d-block" href="#" aria-controls="profileMenu" aria-haspopup="true" aria-expanded="false" data-dropdown-event="click" data-dropdown-target="#profileMenu" data-dropdown-type="css-animation" data-dropdown-duration="300"

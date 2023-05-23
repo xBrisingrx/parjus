@@ -1,0 +1,37 @@
+<%= form_with(model: headquarter_affiliated, local: true) do |form| %>
+  <% if headquarter_affiliated.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(headquarter_affiliated.errors.count, "error") %> prohibited this headquarter_affiliated from being saved:</h2>
+
+      <ul>
+      <% headquarter_affiliated.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :headquarter_id %>
+    <%= form.text_field :headquarter_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :person_id %>
+    <%= form.text_field :person_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :affiliated_rol %>
+    <%= form.text_field :affiliated_rol %>
+  </div>
+
+  <div class="field">
+    <%= form.label :active %>
+    <%= form.check_box :active %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

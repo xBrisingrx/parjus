@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Headquarter:</strong>
+  <%= @headquarter_affiliated.headquarter %>
+</p>
+
+<p>
+  <strong>Person:</strong>
+  <%= @headquarter_affiliated.person %>
+</p>
+
+<p>
+  <strong>Affiliated rol:</strong>
+  <%= @headquarter_affiliated.affiliated_rol %>
+</p>
+
+<p>
+  <strong>Active:</strong>
+  <%= @headquarter_affiliated.active %>
+</p>
+
+<%= link_to 'Edit', edit_headquarter_affiliated_path(@headquarter_affiliated) %> |
+<%= link_to 'Back', headquarter_affiliateds_path %>

@@ -3,7 +3,13 @@ class TablesController < ApplicationController
 
   # GET /tables or /tables.json
   def index
-    @tables = Table.all
+    if params[:institution_id]
+      @tables = Table.where(institution_id: params[:institution_id])
+      @institution = Institution.find(params[:institution_id])
+      @title_modal = "Mesas de la institution #{@institution.name}"
+    else
+      @tables = Table.all
+    end
   end
 
   # GET /tables/1 or /tables/1.json
@@ -13,6 +19,9 @@ class TablesController < ApplicationController
   # GET /tables/new
   def new
     @table = Table.new
+    @title_modal = 'Registrar mesa'
+    @institution_id = params[:institution_id]
+    @political_parties = PoliticalParty.all
   end
 
   # GET /tables/1/edit
@@ -25,8 +34,8 @@ class TablesController < ApplicationController
 
     respond_to do |format|
       if @table.save
+        format.json { render json: { status: 'success', msg: 'Mesa registrada' }, status: :created }
         format.html { redirect_to table_url(@table), notice: "Table was successfully created." }
-        format.json { render :show, status: :created, location: @table }
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @table.errors, status: :unprocessable_entity }
@@ -41,8 +50,8 @@ class TablesController < ApplicationController
         format.html { redirect_to table_url(@table), notice: "Table was successfully updated." }
         format.json { render :show, status: :ok, location: @table }
       else
-        format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @table.errors, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_entity }
       end
     end
   end

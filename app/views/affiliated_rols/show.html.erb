@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @affiliated_rol.name %>
+</p>
+
+<p>
+  <strong>Active:</strong>
+  <%= @affiliated_rol.active %>
+</p>
+
+<%= link_to 'Edit', edit_affiliated_rol_path(@affiliated_rol) %> |
+<%= link_to 'Back', affiliated_rols_path %>

@@ -23,7 +23,11 @@
 //= require cities
 //= require people
 //= require institutions
+//= require headquarters
+//= require institutions
+//= require political_parties
 
+let politician_rols_table, institution_types_table, tables_table
 
 $(document).on('ready', function () {
   // initialization of header

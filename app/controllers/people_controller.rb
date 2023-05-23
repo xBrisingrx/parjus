@@ -4,7 +4,7 @@ class PeopleController < ApplicationController
 
   # GET /people or /people.json
   def index
-    @people = Person.all
+    @people = Person.all.includes(:dni_type,:neighborhood)
   end
 
   # GET /people/1 or /people/1.json
@@ -65,74 +65,96 @@ class PeopleController < ApplicationController
   end
 
   def import
-    data = Roo::Spreadsheet.open('public/data_1_50.xlsx') # open spreadsheet
+    data = Roo::Spreadsheet.open('public/parjus_people.xlsx') # open spreadsheet
     headers = data.row(1) # get header row
-    coso = ''
+    
     data.each_with_index do |row, idx|
-      next if idx == 0 # skip header
-      # create hash from headers and cells
-      ActiveRecord::Base.transaction do
-        person_data = Hash[[headers, row].transpose]
-        person = Person.new
-        person_name = person_data['name'].split(',')[1][1..]
+      next if idx == 0
 
-        person.name = person_data['name'].split(',')[1][1..]
-        person.last_name = person_data['name'].split(',')[0].split()[1]
-        person.genre = person_data['genre']
-        person.dni = person_data['dni'].to_i
-        person.number = person_data['dni'].to_i
+      person_data = Hash[[row].transpose]
+      next if person_data.keys[0].split.first == '<html><b>Partido'
+      next if person_data.keys[0].split.first == 'Padron'
+      next if person_data.keys[0].split.first == '<html><u>Localidad:'
+      next if person_data.keys[0].split.first == '<html><b>Fecha'
+      next if person_data.keys[0].split.first == '<html><b>Orden</b></html>'
 
-        if DniType.find_by_name(person_data['dni_type']).nil?
-          DniType.create(name: person_data['dni_type'])
+      person_data = person_data.keys.compact
+      person = Person.new
+      person.name = person_data[0].split(',')[1][1..]
+      person.last_name = person_data[0].split(',')[0].split()[1]
+      person.genre = person_data[1]
+      
+
+      if person_data[2].to_i == 0
+        if DniType.find_by_name(person_data[2]).nil?
+          DniType.create( name: person_data[2] )
         end
+        person.dni_type_id = DniType.find_by_name(person_data[2]).id
 
-        person.dni_type_id = DniType.find_by_name(person_data['dni_type']).id
-        person.direction = person_data['direction']
-
-        neighborhood = person_data['direction'].split(',')
-        neighborhood = neighborhood.select{ |t| t.include? 'B°'}
-        if !neighborhood.empty?
-          neighborhood = neighborhood[0]
-          neighborhood = neighborhood.gsub('B°', '').strip
-          neighborhood = neighborhood.split('/')[0]
-          person.neighborhood = Neighborhood.find_by_name(neighborhood)
-        end
-        if !person.save!
-          puts "#{person.errors} \n\n"
-          coso = person
-        end
+        dni_index = 3
+        direction_index = 4
+      else
+        dni_index = 2
+        direction_index = 3
       end
-      
-      # coso = person if idx == 7
-      # if User.exists?(email: user_data['email'])
-      #   puts "User with email '#{user_data['email']}' already exists"
-      #   next
-      # end
-      # user = User.new(user_data)
-      
-      # user.save!
-    end
-    rescue => e
-        response = e.message.split(':')
-        render json: { response[0] => response[1] }, status: 402
-    # render json: { status: 'success', msg: 'importado' } 
+      person.dni = person_data[dni_index].to_i
+      person.number = person_data[dni_index].to_i
 
+      person.direction = person_data[direction_index]
+      neighborhood = person_data[direction_index].split(',')
+      neighborhood = neighborhood.select{ |t| t.include? 'B°'}
+      if !neighborhood.empty?
+        if neighborhood.count == 2
+          neighborhood = neighborhood[1]
+        else
+          neighborhood = neighborhood[0]
+        end
+        neighborhood = neighborhood.gsub('B°', '').strip
+        neighborhood = neighborhood.split('/')[0]
+
+        person.neighborhood = Neighborhood.find_by_name(neighborhood)
+      end
+
+      person.save
+    end
+    
   end
 
   def import_neighborhood
-    data = Roo::Spreadsheet.open('public/data_1_50.xlsx') # open spreadsheet
-    headers = data.row(1) # get header row
-    data.each_with_index do |row, idx|
+    excel = Roo::Spreadsheet.open('public/parjus_people.xlsx') # open spreadsheet
+    # headers = data.row(1) # get header row
+    excel.each_with_index do |row, idx|
       next if idx == 0
-      data = Hash[[headers, row].transpose]
-      neighborhood = data['direction'].split(',')
+      # data = Hash[[headers, row].transpose]
+      # neighborhood = data['direction'].split(',')
+      data = Hash[[row].transpose]
+      next if data.keys[0].split.first == '<html><b>Partido'
+      next if data.keys[0].split.first == 'Padron'
+      next if data.keys[0].split.first == '<html><u>Localidad:'
+      next if data.keys[0].split.first == '<html><b>Fecha'
+      next if data.keys[0].split.first == '<html><b>Orden</b></html>'
+      data = data.keys.compact
+
+      if data[2].to_i == 0
+        direction_index = 4
+      else
+        direction_index = 3
+      end
+
+      neighborhood = data[direction_index].split(',')
+
       neighborhood = neighborhood.select{ |t| t.include? 'B°'}
+
       if !neighborhood.empty?
-        neighborhood = neighborhood[0]
+        if neighborhood.count == 2
+          neighborhood = neighborhood[1]
+        else
+          neighborhood = neighborhood[0]
+        end
+        
         neighborhood = neighborhood.gsub('B°', '').strip
         neighborhood = neighborhood.split('/')[0]
-        puts "#{neighborhood}\n"
-        
+
         Neighborhood.create(name: neighborhood, city_id: 1 ) if Neighborhood.find_by_name(neighborhood).nil?
       end
     end

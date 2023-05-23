@@ -1,0 +1,14 @@
+<%= form_with(model: @politician_rol, id: 'politician-rol-form') do |form| %>
+
+  <div class="form-group row g-mb-10">
+    <%= form.label :name, 'Cargo (*):', class: "col-sm-4 col-md-2 col-form-label g-mb-10" %><br>
+    <div class="col-sm-6 col-md-4">
+      <%= form.text_field :name, class: "form-control u-form-control", placeholder: 'Ingrese cargo...' ,required: true  %>
+      <small class="form-control-feedback text-danger politician_rol_name"></small>
+    </div>
+  </div>
+  <div class="actions">
+    <%= form.submit 'Guardar', class: 'btn u-btn-primary g-mr-10' %>
+    <button type="button" class="btn u-btn-darkred" data-dismiss="modal">Cerrar</button>
+  </div>
+<% end %>

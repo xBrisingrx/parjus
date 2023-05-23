@@ -1,0 +1,73 @@
+$("#modal").html("<%= j (render partial: 'shared/modal', locals:{ size: 'lg', content: 'form' } ) %>")
+$("#modal").modal('show')
+
+$('.select-politician-rol').select2({ width: '100%',theme: "bootstrap4", placeholder: "Seleccione rol" })
+count_politicians = 0
+// $("#form-politic-party").on("ajax:success", function(event) {
+//     political_parties.ajax.reload(null,false)
+//     let msg = JSON.parse(event.detail[2].response)
+//     noty_alert(msg.status, msg.msg)
+//     $("#modal").modal('hide')
+//   }).on("ajax:error", function(event) {
+// 	let msg = JSON.parse( event.detail[2].response )
+// 	set_input_status_form('form-politic-party', 'political_party', msg)
+// })
+document.getElementById('add_politician').addEventListener('click', e => {
+  e.preventDefault()
+  let politician = document.querySelector('#political_party_politician')
+  let rol = document.querySelector('#political_party_politician_rol_id').options[document.querySelector('#political_party_politician_rol_id').selectedIndex]
+  if (rol.value == '' || politician.value == '') {
+    noty_alert('info', 'Debe completar nombre y rol para agregar')
+    return
+  }
+  count_politicians++
+  document.getElementById('politicians_list').innerHTML += `
+    <tr class="politician_to_add" id="politician_${count_politicians}">
+      <td id='td_politician' data-value=${politician.value}>${politician.value}</td>
+      <td id='td_rol' data-value=${rol.value}>${rol.text}</td>
+      <td> <button type='button' class='btn btn-xs u-btn-red' onclick="remove_politician('politician_${count_politicians}')"> <i class='fa fa-trash'> </i></button> </td>
+    </tr>
+  `
+  document.getElementById('politicians_table').style.display = ''
+  politician.value = ''
+})
+
+function remove_politician(id) {
+  document.getElementById(id).remove()
+  let politicians_list = document.getElementsByClassName('politician_to_add')
+  if ( politicians_list.length == 0 ) {
+    document.getElementById('politicians_table').style.display = 'none'
+  }
+}
+
+document.getElementById('form-political-party').addEventListener('submit', e => {
+  e.preventDefault()
+  e.stopPropagation()
+  let form = new FormData()
+  form.append('political_party[name]', e.target.querySelector('#political_party_name').value )
+  form.append('political_party[description]', e.target.querySelector('#political_party_description').value )
+
+  const politicians = document.getElementsByClassName('politician_to_add')
+  let politicians_index = 1
+  for (let politician of politicians) {
+    form.append( `political_party[politicians_parties_attributes][${politicians_index}][politician]`, politician.querySelector('#td_politician').textContent )
+    form.append( `political_party[politicians_parties_attributes][${politicians_index}][politician_rol_id]`, politician.querySelector('#td_rol').dataset.value )
+    politicians_index++
+  }
+
+  fetch('<%= political_parties_path() %>', {
+    method: 'POST',
+    headers: {           
+        'X-CSRF-Token': document.getElementsByName('csrf-token')[0].content,
+      },
+      body: form
+  })
+  .then( response => response.json() )
+  .then( response => {
+    if (response.status === 'success') {
+      noty_alert(response.status, response.msg)
+      political_parties_table.ajax.reload(null,false)
+      $("#modal").modal('hide')
+    }
+  })
+})

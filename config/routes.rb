@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  resources :tables_political_parties
+  resources :politicians_parties
+  resources :politician_rols
+  resources :political_parties
+  resources :headquarter_affiliateds
+  resources :affiliated_rols
+  resources :headquarters
   resources :dni_types
   resources :tables
   resources :institutions

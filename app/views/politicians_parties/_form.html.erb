@@ -1,0 +1,32 @@
+<%= form_with(model: politicians_party, local: true) do |form| %>
+  <% if politicians_party.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(politicians_party.errors.count, "error") %> prohibited this politicians_party from being saved:</h2>
+
+      <ul>
+      <% politicians_party.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :politic_party_id %>
+    <%= form.text_field :politic_party_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :politician_rol_id %>
+    <%= form.text_field :politician_rol_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :active %>
+    <%= form.check_box :active %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

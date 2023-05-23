@@ -1,32 +1,22 @@
-<%= form_with(model: institution_type, local: true) do |form| %>
-  <% if institution_type.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(institution_type.errors.count, "error") %> prohibited this institution_type from being saved:</h2>
-
-      <ul>
-      <% institution_type.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+<%= form_with(model: @institution_type, id: 'form-institution-type') do |form| %>
+  <div class="form-group row g-mb-10">
+    <%= form.label :name, 'Nombre (*):', class: "col-sm-4 col-md-2 col-form-label g-mb-10" %><br>
+    <div class="col-sm-6 col-md-4">
+      <%= form.text_field :name, class: "form-control u-form-control", placeholder: 'Ingrese nombre' ,required: true  %>
+      <small class="form-control-feedback text-danger institution_type_name"></small>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name %>
   </div>
 
-  <div class="field">
-    <%= form.label :description %>
-    <%= form.text_area :description %>
-  </div>
-
-  <div class="field">
-    <%= form.label :active %>
-    <%= form.check_box :active %>
+  <div class="form-group row">
+    <%= form.label :description, 'Descripción ', class:'col-sm-4 col-md-2 col-form-label g-mb-10' %>
+    <div class="col-sm-6 col-md-4">
+      <%= form.text_area :description, class: 'form-control u-textarea-expandable g-resize-none', rows: 3 %>
+      <small class="form-control-feedback text-danger institution_type_description"></small>
+    </div>
   </div>
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit 'Guardar', class: 'btn u-btn-primary g-mr-10' %>
+    <button type="button" class="btn u-btn-darkred" data-dismiss="modal">Cerrar</button>
   </div>
 <% end %>

@@ -1,0 +1,65 @@
+$("#modal").html("<%= j (render partial: 'shared/modal', locals:{ size: 'lg', content: 'form' } ) %>")
+$("#modal").modal('show')
+
+$('.select-neighborhood-headquarter').select2({ width: '100%',theme: "bootstrap4", placeholder: "Seleccione barrio (*)" })
+$('.select-affiliated').select2({ width: '100%',theme: "bootstrap4", placeholder: "Seleccione afiliado" })
+$('.select-affiliated-rol').select2({ width: '100%',theme: "bootstrap4", placeholder: "Rol del afiliado" })
+
+document.getElementById('add_affiliated').addEventListener('click', e => {
+  e.preventDefault()
+  let affiliated = document.querySelector('#headquarter_person_id').options[document.querySelector('#headquarter_person_id').selectedIndex]
+  let rol = document.querySelector('#headquarter_headquarter_affiliated_id').options[document.querySelector('#headquarter_headquarter_affiliated_id').selectedIndex]
+  if (rol.value == '' || affiliated.value == '') {
+    noty_alert('info', 'Debe seleccionar afiliado y rol')
+    return
+  }
+  document.getElementById('affiliated_list').innerHTML += `
+    <tr class="affiliated_to_add" id="affiliated_${affiliated.value}">
+      <td id='td_affiliated' data-value=${affiliated.value}>${affiliated.text}</td>
+      <td id='td_rol' data-value=${rol.value}>${rol.text}</td>
+      <td> <button type='button' class='btn btn-xs u-btn-red' onclick="remove_affiliated('affiliated_${affiliated.value}')"> <i class='fa fa-trash'> </i></button> </td>
+    </tr>
+  `
+  document.getElementById('affiliated_table').style.display = ''
+})
+
+function remove_affiliated(id) {
+  document.getElementById(id).remove()
+  let affiliated_list = document.getElementsByClassName('affiliated_to_add')
+  if ( affiliated_list.length == 0 ) {
+    document.getElementById('affiliated_table').style.display = 'none'
+  }
+}
+
+document.getElementById('form-headquarter').addEventListener('submit', e => {
+  e.preventDefault()
+  e.stopPropagation()
+  let form = new FormData()
+  form.append('headquarter[name]', e.target.querySelector('#headquarter_name').value )
+  form.append('headquarter[description]', e.target.querySelector('#headquarter_description').value )
+  form.append('headquarter[neighborhood_id]', e.target.querySelector('#headquarter_neighborhood_id').value )
+
+  const affiliateds = document.getElementsByClassName('affiliated_to_add')
+  let affiliateds_index = 1
+  for (let affiliated of affiliateds) {
+    form.append( `headquarter[headquarter_affiliateds_attributes][${affiliateds_index}][person_id]`, affiliated.querySelector('#td_affiliated').dataset.value )
+    form.append( `headquarter[headquarter_affiliateds_attributes][${affiliateds_index}][affiliated_rol_id]`, affiliated.querySelector('#td_rol').dataset.value )
+    affiliateds_index++
+  }
+
+  fetch('<%= headquarters_path() %>', {
+    method: 'POST',
+    headers: {           
+        'X-CSRF-Token': document.getElementsByName('csrf-token')[0].content,
+      },
+      body: form
+  })
+  .then( response => response.json() )
+  .then( response => {
+    if (response.status === 'success') {
+      noty_alert(response.status, response.msg)
+      headquarters_table.ajax.reload(null,false)
+      $("#modal").modal('hide')
+    }
+  })
+})

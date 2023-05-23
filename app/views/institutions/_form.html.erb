@@ -1,47 +1,40 @@
-<%= form_with(model: institution, local: true) do |form| %>
-  <% if institution.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(institution.errors.count, "error") %> prohibited this institution from being saved:</h2>
-
-      <ul>
-      <% institution.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+<%= form_with(model: @institution, remote: true, class: 'g-brd-around g-brd-gray-light-v4 g-pa-10 g-mb-10', id: 'form-institution') do |form| %>
+  <div class="form-group row g-mb-10">
+    <%= form.label :name, 'Nombre (*):', class: "col-sm-4 col-md-2 col-form-label g-mb-10" %><br>
+    <div class="col-sm-6 col-md-4">
+      <%= form.text_field :name, class: "form-control u-form-control", placeholder: 'Ingrese nombre' ,required: true  %>
+      <small class="form-control-feedback text-danger person_name"></small>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name %>
   </div>
 
-  <div class="field">
-    <%= form.label :description %>
-    <%= form.text_field :description %>
+  <div class="form-group  row">
+    <%= form.label :institution_type_id, 'Tipo institucion (*)', class:'col-sm-4 col-md-2 col-form-label g-mb-10' %>
+    <div class="col-sm-8 col-lg-6">
+      <%= form.select(:institution_type_id, @institution_types.collect {|type| [type.name, type.id]}, { include_blank: true},
+                      class: 'form-control select-institution-type', required: true) %>
+      <small class="form-control-feedback text-danger institution_type"></small>
+    </div>
   </div>
 
-  <div class="field">
-    <%= form.label :direction %>
-    <%= form.text_field :direction %>
+  <div class="form-group  row">
+    <%= form.label :neighborhood_id, 'Barrio (*)', class:'col-sm-4 col-md-2 col-form-label g-mb-10' %>
+    <div class="col-sm-8 col-lg-6">
+      <%= form.select(:neighborhood_id, @neighborhoods.collect {|n| [n.name, n.id]}, { include_blank: true},
+                      class: 'form-control select-neighborhood-institution', required: true) %>
+      <small class="form-control-feedback text-danger neighborhood_id"></small>
+    </div>
   </div>
 
-  <div class="field">
-    <%= form.label :active %>
-    <%= form.check_box :active %>
-  </div>
-
-  <div class="field">
-    <%= form.label :neighborhood_id %>
-    <%= form.text_field :neighborhood_id %>
-  </div>
-
-  <div class="field">
-    <%= form.label :institution_type_id %>
-    <%= form.text_field :institution_type_id %>
+  <div class="form-group row g-mb-10">
+    <%= form.label :direction, 'Domicilio:', class: "col-sm-4 col-md-2 col-form-label g-mb-10" %><br>
+    <div class="col-sm-6 col-md-4">
+      <%= form.text_field :direction, class: "form-control u-form-control", placeholder: 'Domicilio particular'  %>
+      <small class="form-control-feedback text-danger person_direction"></small>
+    </div>
   </div>
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit 'Guardar', class: 'btn u-btn-primary g-mr-10' %>
+    <button type="button" class="btn u-btn-darkred" data-dismiss="modal">Cerrar</button>
   </div>
 <% end %>

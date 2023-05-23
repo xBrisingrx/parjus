@@ -1,0 +1,43 @@
+$("#modal").html("<%= j (render partial: 'shared/modal', locals:{ size: 'lg', content: 'form' } ) %>")
+
+$('.select-political-parties').select2({ width: '100%',theme: "bootstrap4", placeholder: "Seleccione partido politico (*)" })
+
+$("#modal").modal('show')
+
+
+// $("#form-table").on("ajax:success", function(event) {
+//     tables_table.ajax.reload(null,false)
+//     let msg = JSON.parse(event.detail[2].response)
+//     noty_alert(msg.status, msg.msg)
+//     $("#modal").modal('hide')
+//   }).on("ajax:error", function(event) {
+// 	let msg = JSON.parse( event.detail[2].response )
+// 	set_input_status_form('form-table', 'table', msg)
+// })
+count_political_parties = 0
+document.getElementById('add_political_party').addEventListener('click', e => {
+  e.preventDefault()
+  let political_party = document.querySelector('#table_political_party_id').options[document.querySelector('#table_political_party_id').selectedIndex]
+  if (political_party.value == '') {
+    noty_alert('info', 'No ha seleccionado ningun partido')
+    return
+  }
+  count_political_parties++
+  document.getElementById('political_parties_list').innerHTML += `
+    <tr class="political_party_to_add" id="political_party_${count_political_parties}">
+      <td id='td_political_party' data-value=${political_party.value}>${political_party.text}</td>
+      <td> <button type='button' class='btn btn-xs u-btn-red' onclick="remove_political_party('political_party_${count_political_parties}')"> <i class='fa fa-trash'> </i></button> </td>
+    </tr>
+  `
+  document.getElementById('political_parties_table').style.display = ''
+  $('#table_political_party_id option:selected').attr('disabled', 'disabled')
+  $('.select-political-parties').val('').trigger('change')
+})
+
+function remove_political_party(id) {
+  document.getElementById(id).remove()
+  let political_parties_list = document.getElementsByClassName('political_party_to_add')
+  if ( political_parties_list.length == 0 ) {
+    document.getElementById('political_parties_table').style.display = 'none'
+  }
+}

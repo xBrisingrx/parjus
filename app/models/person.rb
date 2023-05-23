@@ -27,7 +27,7 @@
 #
 class Person < ApplicationRecord
   belongs_to :neighborhood, optional: true
-  belongs_to :dni_type
+  belongs_to :dni_type, optional: true
 
   validates :name, :last_name, :number, presence: true
   validates :number, 
@@ -55,7 +55,25 @@ class Person < ApplicationRecord
   def age
     case self.dni 
       when 4000000..5000000
-        
+        80
+      when 5000001..10000000
+        75
+      when 10000001..15000000
+        70
+      when 15000001..20000000
+        65
+      when 20000001..25000000
+        60
+      when 25000001..30000000
+        40
+      when 30000001..35000000
+        34
+      when 35000001..40000000
+        27
+      when 40000001..45000000
+        24
+      else
+        20 
     end
   end
 end

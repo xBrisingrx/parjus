@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Headquarter Affiliateds</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Headquarter</th>
+      <th>Person</th>
+      <th>Affiliated rol</th>
+      <th>Active</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @headquarter_affiliateds.each do |headquarter_affiliated| %>
+      <tr>
+        <td><%= headquarter_affiliated.headquarter %></td>
+        <td><%= headquarter_affiliated.person %></td>
+        <td><%= headquarter_affiliated.affiliated_rol %></td>
+        <td><%= headquarter_affiliated.active %></td>
+        <td><%= link_to 'Show', headquarter_affiliated %></td>
+        <td><%= link_to 'Edit', edit_headquarter_affiliated_path(headquarter_affiliated) %></td>
+        <td><%= link_to 'Destroy', headquarter_affiliated, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Headquarter Affiliated', new_headquarter_affiliated_path %>

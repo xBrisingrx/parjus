@@ -1,0 +1,14 @@
+$("#modal_in_institutions").html("<%= j (render partial: 'index' ) %>")
+
+$(document).ready(function(){
+	institution_types_table = $("#institution_types_table").DataTable({
+    'ajax': `institution_types`,
+    'columns': [
+    {'data': 'name'},
+    {'data': 'actions'}
+    ],
+    'language': {'url': datatables_lang}
+	})
+})
+
+$("#modal_in_institutions").modal('show')

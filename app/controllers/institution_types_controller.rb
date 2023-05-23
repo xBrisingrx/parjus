@@ -4,6 +4,7 @@ class InstitutionTypesController < ApplicationController
   # GET /institution_types or /institution_types.json
   def index
     @institution_types = InstitutionType.all
+    @title_modal = 'Tipos de institutiones'
   end
 
   # GET /institution_types/1 or /institution_types/1.json
@@ -13,6 +14,7 @@ class InstitutionTypesController < ApplicationController
   # GET /institution_types/new
   def new
     @institution_type = InstitutionType.new
+    @title_modal = 'Registrar tipo de institución'
   end
 
   # GET /institution_types/1/edit
@@ -25,11 +27,11 @@ class InstitutionTypesController < ApplicationController
 
     respond_to do |format|
       if @institution_type.save
+        format.json { render json: { status: 'success', msg: 'Registro exitoso' }, status: :created }
         format.html { redirect_to institution_type_url(@institution_type), notice: "Institution type was successfully created." }
-        format.json { render :show, status: :created, location: @institution_type }
       else
-        format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @institution_type.errors, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_entity }
       end
     end
   end
@@ -38,11 +40,11 @@ class InstitutionTypesController < ApplicationController
   def update
     respond_to do |format|
       if @institution_type.update(institution_type_params)
+        format.json { render json: { status: 'success', msg: 'Datos actualizados' }, status: :ok }
         format.html { redirect_to institution_type_url(@institution_type), notice: "Institution type was successfully updated." }
-        format.json { render :show, status: :ok, location: @institution_type }
       else
-        format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @institution_type.errors, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_entity }
       end
     end
   end

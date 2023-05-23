@@ -1,0 +1,44 @@
+<%= form_with(model: @political_party, id: 'form-political-party') do |form| %>
+  <div class="form-group row">
+    <%= form.label :name, 'Partido:', class: "col-form-label col-sm-3 col-md-4" %><br>
+    <div class="col-sm-6 col-md-4">
+      <%= form.text_field :name, class: "form-control u-form-control", placeholder: 'Ingrese nombre del partido',required: true  %>
+      <small class="form-control-feedback text-danger person_last_name"></small>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <%= form.label :description, 'Descripción:', class: 'col-form-label col-sm-3 col-md-4' %>
+    <%= form.text_area :description, class: 'form-control col-sm-9 col-md-6 u-textarea-expandable g-resize-none', rows: 3, placeholder: 'Ingrese una descripcion de esta sede' %>
+  </div>
+
+  <p>Representantes: </p>
+  <div class="form-group row">
+    <div class="col-4">
+      <%= form.text_field :politician, placeholder: 'Nombre...',class: "form-control u-form-control" %>
+      <small class="invalid-feedback political_party_politician"></small>
+    </div>
+    <div class="col-4">
+      <%= form.select(:politician_rol_id, @politician_roles.collect {|p| [p[1], p[0]]}, 
+                      { include_blank: true},
+                      class: 'form-control select-politician-rol') %>
+      <small class="invalid-feedback political_party_politician"></small>
+    </div>
+    <button id="add_politician" class="btn u-btn-teal"><i class="fa fa-plus"></i></button>
+  </div>
+
+  <table id="politicians_table" class="table" style="display: none;">
+    <thead>
+      <th>Conformado por: </th>
+      <th colspan="2">Cargo</th>
+    </thead>
+    <tbody id="politicians_list">
+      
+    </tbody>
+  </table>
+
+  <div class="actions">
+    <%= form.submit 'Guardar', class: 'btn u-btn-primary g-mr-10' %>
+    <button type="button" class="btn u-btn-darkred" data-dismiss="modal">Cerrar</button>
+  </div>
+<% end %>

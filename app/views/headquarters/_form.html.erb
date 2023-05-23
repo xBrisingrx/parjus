@@ -1,0 +1,55 @@
+<%= form_with(model: @headquarter, class: 'g-brd-around g-brd-gray-light-v4 g-pa-10 g-mb-10', id: 'form-headquarter'  ) do |form| %>
+ <div class="form-group row">
+    <%= form.label :name, 'Nombre: ', class: 'col-form-label col-sm-3 col-md-4' %>
+    <div class="col-sm-9 col-md-6">
+      <%= form.text_field :name, class: 'form-control', required:true %>
+      <small class="invalid-feedback company_name"></small>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <%= form.label :description, 'Descripción:', class: 'col-form-label col-sm-3 col-md-4' %>
+    <%= form.text_area :description, class: 'form-control col-sm-9 col-md-6 u-textarea-expandable g-resize-none', rows: 3, placeholder: 'Ingrese una descripcion de esta sede' %>
+  </div>
+
+  <div class="form-group  row">
+    <%= form.label :neighborhood_id, 'Barrio (*)', class:'col-sm-4 col-md-2 col-form-label g-mb-10' %>
+    <div class="col-sm-8 col-lg-6">
+      <%= form.select(:neighborhood_id, @neighborhoods.collect {|n| [n.name, n.id]}, { include_blank: true},
+                      class: 'form-control select-neighborhood-headquarter', required: true) %>
+      <small class="form-control-feedback text-danger neighborhood_id"></small>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <%= form.label :person_id, 'Afiliado: ', class: 'col-form-label col-2' %>
+    <div class="col-4">
+      <%= form.select(:person_id, @people.collect {|p| ["#{p[1]} #{p[2]}", p[0]]}, 
+                      { include_blank: true},
+                      class: 'form-control select-affiliated') %>
+      <small class="invalid-feedback fuel_to_vehicle_ticket_book"></small>
+    </div>
+    <div class="col-4">
+      <%= form.select(:headquarter_affiliated_id, @affiliated_rol.collect {|h| [h[1], h[0]]}, 
+                      { include_blank: true},
+                      class: 'form-control select-affiliated-rol') %>
+      <small class="invalid-feedback fuel_to_vehicle_ticket_book"></small>
+    </div>
+    <button id="add_affiliated" class="btn u-btn-teal"><i class="fa fa-plus"></i></button>
+  </div>
+
+  <table id="affiliated_table" class="table" style="display: none;">
+    <thead>
+      <th>Afiliado</th>
+      <th colspan="2">Rol</th>
+    </thead>
+    <tbody id="affiliated_list">
+      
+    </tbody>
+  </table>
+
+  <div class="actions">
+    <%= form.submit 'Guardar', class: 'btn u-btn-primary mr-2' %>
+    <button type="button" class="btn u-btn-red" data-dismiss="modal">Cerrar</button>
+  </div>
+<% end %>

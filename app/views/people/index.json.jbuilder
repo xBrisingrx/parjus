@@ -1,8 +1,9 @@
 json.data @people do |person|
-	json.name person.name
+	json.name person.fullname
 	json.genre person.genre
-	json.dni_type person.dni_type.name
+	json.dni_type (person.dni_type) ? person.dni_type.name : ''
 	json.number person.number
+	json.age person.age
 	json.direction person.direction
 	json.neighborhood (person.neighborhood) ? person.neighborhood.name : ''
 	json.actions "#{ link_to '<i class="fa fa-edit"></i>'.html_safe, edit_person_path(person), remote: :true, class: 'btn btn-sm u-btn-primary text-white', title: 'Editar' } 

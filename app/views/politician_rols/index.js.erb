@@ -1,0 +1,14 @@
+$("#politician_rols").html("<%= j (render partial: 'index' ) %>")
+
+$(document).ready(function(){
+	politician_rols_table = $("#politician_rols_table").DataTable({
+    'ajax': `politician_rols`,
+    'columns': [
+    {'data': 'name'},
+    {'data': 'actions'}
+    ],
+    'language': {'url': datatables_lang}
+	})
+})
+
+$("#politician_rols").modal('show')
