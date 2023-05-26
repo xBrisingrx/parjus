@@ -20,12 +20,14 @@
 class User < ApplicationRecord
 	has_secure_password
 
+  has_one :institution
+
 	validates :name, presence: true
 	validates :username, presence: true, 
 		uniqueness: { case_sensitive: false, message: "Este usuario ya se encuentra registrado" },
     length: { in: 3..15 },
     format: {
-      with: /\A[a-z0-9A-Z]+\z/,
+      with: /\A[a-z0-9A-Z_]+\z/,
       message: :invalid
     }
 	validates :password_digest, presence: true, length: { minimum: 6 }
@@ -42,8 +44,17 @@ class User < ApplicationRecord
   
   enum rol: {
     admin: 1, 
-    consulta: 2
+    fiscal_gral: 2,
+    fiscal: 3
+
   }
+
+  def rol_name
+    rol_name = "Admin" if self.rol == 'admin'
+    rol_name = "Fiscal gral" if self.rol == 'fiscal_gral'
+    rol_name = "Fiscal" if self.rol == 'fiscal'
+    rol_name
+  end
 
   private
 

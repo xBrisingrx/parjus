@@ -15,6 +15,7 @@ $(document).ready(function(){
       {'data': 'neighborhood'},
       {'data': 'direction'},
       {'data': 'tables'},
+      {'data': 'fiscal'},
       {'data': 'actions'}
     ],
     'language': {'url': datatables_lang}

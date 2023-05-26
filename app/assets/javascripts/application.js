@@ -26,6 +26,8 @@
 //= require headquarters
 //= require institutions
 //= require political_parties
+//= require votes
+//= require neighborhoods
 
 let politician_rols_table, institution_types_table, tables_table
 

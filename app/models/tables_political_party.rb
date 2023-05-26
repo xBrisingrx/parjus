@@ -21,5 +21,5 @@
 #
 class TablesPoliticalParty < ApplicationRecord
   belongs_to :table
-  belongs_to :politic_party
+  belongs_to :political_party
 end

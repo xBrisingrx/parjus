@@ -1,0 +1,3 @@
+class VotePolicy < BasePolicy
+	
+end

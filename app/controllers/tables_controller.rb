@@ -22,6 +22,7 @@ class TablesController < ApplicationController
     @title_modal = 'Registrar mesa'
     @institution_id = params[:institution_id]
     @political_parties = PoliticalParty.all
+    @fiscals = User.where(rol: :fiscal).or( User.where(rol: :fiscal_gral)).actives
   end
 
   # GET /tables/1/edit
@@ -31,7 +32,7 @@ class TablesController < ApplicationController
   # POST /tables or /tables.json
   def create
     @table = Table.new(table_params)
-
+    @table.number = 0
     respond_to do |format|
       if @table.save
         format.json { render json: { status: 'success', msg: 'Mesa registrada' }, status: :created }
@@ -74,6 +75,8 @@ class TablesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def table_params
-      params.require(:table).permit(:name, :number, :vouters, :active, :institution_id)
+      params.require(:table).permit(:name, 
+        :number, :vouters, :active, :institution_id, :fiscal_id,
+        tables_political_parties_attributes: [ :id, :political_party_id ])
     end
 end

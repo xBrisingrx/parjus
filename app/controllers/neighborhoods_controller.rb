@@ -1,9 +1,10 @@
 class NeighborhoodsController < ApplicationController
+  before_action :authorize!
   before_action :set_neighborhood, only: %i[ show edit update destroy ]
 
   # GET /neighborhoods or /neighborhoods.json
   def index
-    @neighborhoods = Neighborhood.all
+    @neighborhoods = Neighborhood.actives
   end
 
   # GET /neighborhoods/1 or /neighborhoods/1.json
@@ -54,6 +55,24 @@ class NeighborhoodsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to neighborhoods_url, notice: "Neighborhood was successfully destroyed." }
       format.json { head :no_content }
+    end
+  end
+
+  def fix_neighborhood
+    name = params[:neighborhood_name]
+    id = params[:neighborhood_id].to_i
+    neightborhoods = Neighborhood.where("name LIKE ?", "%#{name}%" ).where.not(id: id)
+    
+    # puts "\n cantidad de personas afectadas => #{neightborhoods.joins(:people).count} \n"
+    ids = neightborhoods.pluck(:id)
+    people = Person.where(neighborhood_id: ids)
+    puts "\n cantidad de barrios => #{people.count} \n"
+
+    people.each do |person|
+      person.update(neighborhood_id: id)
+    end
+    neightborhoods.each do |neightborhood|
+      neightborhood.destroy if neightborhood.people.count == 0
     end
   end
 

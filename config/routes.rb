@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  get 'institution_votes', to: 'institution_votes#index'
+  resources :votes do 
+    get 'mesa', to: 'votes#by_table', on: :collection
+    get 'institucion', to: 'votes#by_institution', on: :collection
+  end
   resources :tables_political_parties
   resources :politicians_parties
   resources :politician_rols
@@ -10,7 +15,11 @@ Rails.application.routes.draw do
   resources :tables
   resources :institutions
   resources :institution_types
-  resources :neighborhoods
+
+  resources :neighborhoods do 
+    get 'fix_neighborhood', on: :collection
+  end
+  
   resources :cities
   resources :provinces
   resources :people do 

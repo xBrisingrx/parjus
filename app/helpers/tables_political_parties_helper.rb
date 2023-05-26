@@ -1,0 +1,2 @@
+module TablesPoliticalPartiesHelper
+end

@@ -1,0 +1,13 @@
+<h1>Registro de votos <%= @title %></h1>
+
+<% if current_user.fiscal? %>
+  <%= render ('fiscal_view')%>
+<% end %>
+
+<% if current_user.fiscal? %>
+  <%= render ('fiscal_gral_view')%>
+<% end %>
+
+<% if current_user.admin? %>
+  "------"
+<% end %>

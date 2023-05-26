@@ -1,0 +1,19 @@
+$("#modal").html("<%= j (render partial: 'shared/modal', locals:{ size: 'lg', content: 'form' } ) %>")
+$("#modal").modal('show')
+
+$('.select-party').select2({ 
+  width: '100%',theme: "bootstrap4", placeholder: "Seleccione partido (*)" })
+$('.select-table').select2({ 
+  width: '100%',theme: "bootstrap4", placeholder: "Seleccione mesa (*)" })
+
+
+$("#form-vote").on("ajax:success", function(event) {
+    // votes_table.ajax.reload(null,false)
+    let msg = JSON.parse(event.detail[2].response)
+    noty_alert(msg.status, msg.msg)
+    location.reload()
+    $("#modal").modal('hide')
+  }).on("ajax:error", function(event) {
+	let msg = JSON.parse( event.detail[2].response )
+	set_input_status_form('form-vote', 'vote', msg)
+})

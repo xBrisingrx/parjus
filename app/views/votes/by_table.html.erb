@@ -1,0 +1,39 @@
+<h1>Registro de votos <%= @title %></h1>
+
+
+
+<div class="d-none d-sm-block">
+	<%= link_to "<i class='fa fa-plus'></i> Registrar voto".html_safe, new_vote_path(table_id: @table.id),
+          class: 'btn u-btn-outline-cyan u-btn-hover-v1-2 mb-2 mr-4' %>
+</div>
+<div class="d-block d-sm-none">
+	<%= link_to "<i class='fa fa-plus'></i> Registrar voto mobile".html_safe, new_vote_path(table_id: @table.id), 
+          remote: true,
+          class: 'btn u-btn-outline-cyan u-btn-hover-v1-2 mb-2 mr-4' %>
+</div>
+
+<div class="card g-brd-primary rounded g-mb-30">
+  <h3 class="card-header g-bg-primary g-brd-transparent g-color-white g-font-size-16 mb-2 rounded-0">
+    <i class="fa fa-book"></i>
+    Votos registrados
+  </h3>
+   <div class="px-2  pb-2">
+    <table id="votes_table" class="table table-sm table-hover dt-responsive w-100 u-table--v1" data-show='show'>
+      <thead>
+        <tr>
+          <th>Partido</th>
+          <th>Votos</th>
+        </tr>
+      </thead>
+        <% @data.each do |d| %>
+          <tr>
+            <td><%= d['party'] %></td>
+            <td><%= d['votes'] %></td>
+          </tr>
+        <% end %>
+      <tbody>
+        <!-- Completo con ajax -->
+      </tbody>
+    </table>
+  </div>
+</div>

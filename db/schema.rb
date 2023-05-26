@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_23_025534) do
+ActiveRecord::Schema.define(version: 2023_05_24_182731) do
 
   create_table "activity_histories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci", force: :cascade do |t|
     t.string "record_type"
@@ -89,6 +89,8 @@ ActiveRecord::Schema.define(version: 2023_05_23_025534) do
     t.bigint "institution_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "fiscal_id"
+    t.index ["fiscal_id"], name: "index_institutions_on_fiscal_id"
     t.index ["institution_type_id"], name: "index_institutions_on_institution_type_id"
     t.index ["neighborhood_id"], name: "index_institutions_on_neighborhood_id"
   end
@@ -161,6 +163,8 @@ ActiveRecord::Schema.define(version: 2023_05_23_025534) do
     t.bigint "institution_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "fiscal_id"
+    t.index ["fiscal_id"], name: "index_tables_on_fiscal_id"
     t.index ["institution_id"], name: "index_tables_on_institution_id"
   end
 
@@ -187,6 +191,16 @@ ActiveRecord::Schema.define(version: 2023_05_23_025534) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  create_table "votes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci", force: :cascade do |t|
+    t.bigint "table_id"
+    t.bigint "political_party_id"
+    t.integer "number", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["political_party_id"], name: "index_votes_on_political_party_id"
+    t.index ["table_id"], name: "index_votes_on_table_id"
+  end
+
   add_foreign_key "activity_histories", "users"
   add_foreign_key "cities", "provinces"
   add_foreign_key "headquarter_affiliateds", "affiliated_rols"
@@ -195,12 +209,16 @@ ActiveRecord::Schema.define(version: 2023_05_23_025534) do
   add_foreign_key "headquarters", "neighborhoods"
   add_foreign_key "institutions", "institution_types"
   add_foreign_key "institutions", "neighborhoods"
+  add_foreign_key "institutions", "users", column: "fiscal_id"
   add_foreign_key "neighborhoods", "cities"
   add_foreign_key "people", "dni_types"
   add_foreign_key "people", "neighborhoods"
   add_foreign_key "politicians_parties", "political_parties"
   add_foreign_key "politicians_parties", "politician_rols"
   add_foreign_key "tables", "institutions"
+  add_foreign_key "tables", "users", column: "fiscal_id"
   add_foreign_key "tables_political_parties", "political_parties"
   add_foreign_key "tables_political_parties", "tables"
+  add_foreign_key "votes", "political_parties"
+  add_foreign_key "votes", "tables"
 end

@@ -1,4 +1,5 @@
 class InstitutionsController < ApplicationController
+  before_action :authorize!
   before_action :set_institution, only: %i[ show edit update destroy ]
   before_action :set_variables, only: %i[ new edit ]
 
@@ -11,9 +12,11 @@ class InstitutionsController < ApplicationController
 
   def new
     @institution = Institution.new
+    @fiscals = User.where(rol: 'fiscal_gral')
   end
 
   def edit
+    @fiscals = User.where(rol: 'fiscal_gral')
   end
 
   def create
@@ -63,6 +66,6 @@ class InstitutionsController < ApplicationController
 
     def institution_params
       params.require(:institution).permit(:name, :description, :d_type, :active, 
-        :direction, :institution_type_id, :neighborhood_id)
+        :direction, :institution_type_id, :neighborhood_id, :fiscal_id)
     end
 end

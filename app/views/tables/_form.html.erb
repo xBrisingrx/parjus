@@ -18,11 +18,22 @@
 
   <div class="form-group row">
     <div class="col-4 col-sm-4 col-md-4 col-lg-2">
+      <%= form.label :fiscal_id, 'A cargo de:', class:' col-form-label g-mb-10' %>
+    </div>
+    <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+      <%= form.select(:fiscal_id, @fiscals.collect {|u| [u.name, u.id]}, { include_blank: true},
+                      class: 'form-control select-fiscal', required: true) %>
+      <small class="form-control-feedback text-danger table_fiscal_id"></small>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <div class="col-4 col-sm-4 col-md-4 col-lg-2">
       <%= form.label :political_party_id, 'Partido politico', class:' col-form-label g-mb-10' %>
     </div>
     <div class="col-6 col-sm-6 col-md-6 col-lg-6">
       <%= form.select(:political_party_id, @political_parties.collect {|p| [p.name, p.id]}, { include_blank: true},
-                      class: 'form-control select-political-parties', required: true) %>
+                      class: 'form-control select-political-parties') %>
       <small class="form-control-feedback text-danger table_political_party_id"></small>
     </div>
     <div class="col-2 col-sm-2">

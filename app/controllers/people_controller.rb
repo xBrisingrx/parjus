@@ -1,4 +1,5 @@
 class PeopleController < ApplicationController
+  before_action :authorize!
   before_action :set_person, only: %i[ show edit update destroy ]
   before_action :set_variables_form, only: %i[ new edit ]
 

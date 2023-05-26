@@ -24,4 +24,11 @@
 class ActivityHistory < ApplicationRecord
   belongs_to :record, polymorphic: true
   belongs_to :user
+
+  enum action: {
+    create_record: 1, 
+    update_record: 2,
+    disable: 3,
+    enable: 4
+  }
 end

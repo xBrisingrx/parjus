@@ -1,0 +1,2 @@
+module InstitutionVotesHelper
+end

@@ -1,4 +1,5 @@
 class PoliticalPartiesController < ApplicationController
+  before_action :authorize!
   before_action :set_political_party, only: %i[ show edit update destroy ]
 
   # manejamos los partidos politicos

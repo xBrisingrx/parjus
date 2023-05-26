@@ -1,0 +1,2 @@
+module HeadquarterAffiliatedsHelper
+end

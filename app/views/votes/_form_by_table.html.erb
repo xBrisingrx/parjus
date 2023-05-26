@@ -1,0 +1,19 @@
+<%= form_with(model: @vote, id: 'form-vote-table') do |form| %>
+  <%= form.hidden_field :table_id, value: @table.id %>
+
+  <% @parties.each_with_index do |party, index|%>
+    <div class="form_group row register_vote mb-2">
+      <%= form.hidden_field :political_party_id, value: party.id %>
+      <%= form.label :party_name, "#{party.name}:", class: "col-sm-4 col-md-2 col-form-label g-mb-10" %><br>
+      <div class="col-sm-6 col-md-4">
+        <%= form.text_field :number, class: "form-control u-form-control", placeholder: "Votos de #{party.name}"  %>
+        <small class="form-control-feedback text-danger person_name"></small>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <button type="button" class="btn u-btn-primary g-mr-10" onclick="create_vote_table()"> Guardar </button>
+    <%= link_to 'Cancelar', mesa_votes_path, class: 'btn u-btn-red'%>
+  </div>
+<% end %>

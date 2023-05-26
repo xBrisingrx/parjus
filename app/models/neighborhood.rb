@@ -20,6 +20,8 @@
 #
 class Neighborhood < ApplicationRecord
   belongs_to :city
+  has_many :people
+  has_many :institutions
 
   validates :name, presence: true, 
     uniqueness: { case_sensitive: false, message: "Ya existe un barrio registrada con este nombre" }
