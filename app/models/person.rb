@@ -52,6 +52,20 @@ class Person < ApplicationRecord
     "#{self.last_name} #{self.name}"
   end
 
+  def fix_names
+    names = ''
+    last_names = ''
+    self.name.split .each do |name|
+      names += "#{name.capitalize} "
+    end
+
+    self.last_name.split.each do |last_name|
+      last_names += "#{last_name.capitalize} "
+    end
+
+    self.update(name: names, last_name: last_names)
+  end
+
   def age
     case self.dni 
       when 4000000..5000000

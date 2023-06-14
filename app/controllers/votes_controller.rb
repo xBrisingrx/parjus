@@ -3,9 +3,21 @@ class VotesController < ApplicationController
 
   # GET /votes or /votes.json
   def index
-    redirect_to institucion_votes_path if Custom.fiscal_gral?
-    redirect_to mesa_votes_path if Custom.fiscal?
+    redirect_to institucion_votes_path if Current.user.fiscal_gral?
+    redirect_to mesa_votes_path if Current.user.fiscal?
 
+    if Current.user.admin?
+      @cols = [ 'Institucion', 'Mesas cerradas', 'Referente' ,'Partidos' ]
+      @cols_parties = [ 'Partido' ]
+      @politician_rols = PoliticianRol.actives.order(:name)
+      @political_parties = PoliticalParty.actives
+      @count_political_parties = @political_parties.count
+      @politician_rols.each do |rol|
+        @cols << rol.name 
+        @cols_parties << rol.name
+      end
+      @institutions = Institution.actives
+    end
   end
 
   def by_table # vista de fiscal de mesa
@@ -43,6 +55,20 @@ class VotesController < ApplicationController
     end
   end
 
+  def grafic_data
+    @politician_rols = PoliticianRol.actives.order(:name)
+    @political_parties = PoliticalParty.actives
+    @chart_data = []
+    @chart_cols = []
+    @politician_rols.each do |rol|
+      @political_parties.each do |party|
+        @chart_cols << "#{party.name} #{rol.name}"
+        @chart_data << Vote.by_party( party.id, rol.id )
+      end
+    end
+    render json: { 'chart_cols': @chart_cols, 'chart_data': @chart_data }
+  end
+
   # GET /votes/1 or /votes/1.json
   def show
   end
@@ -50,9 +76,11 @@ class VotesController < ApplicationController
   # GET /votes/new
   def new
     @title_modal = "Registrar voto"
+    @politician_roles = PoliticianRol.actives.order(name: :asc)
     @vote = Vote.new
+
     if current_user.fiscal_gral?
-      @tables = Institution.find_by_fiscal_id(current_user.id).tables.order( name: :asc)
+      @tables = Institution.find_by_fiscal_id(current_user.id).tables.where('tables.closed = false').order( name: :asc)
       @parties = PoliticalParty.all.order(name: :asc)
       @form = 'form'
     else
@@ -69,7 +97,6 @@ class VotesController < ApplicationController
 
   # POST /votes or /votes.json
   def create
-    # @vote = Vote.new(vote_params)
     if Current.user.fiscal?
       ActiveRecord::Base.transaction do 
         for i in 1..params[:cant].to_i do 
@@ -83,14 +110,20 @@ class VotesController < ApplicationController
         format.html { redirect_to votes_url, notice: "Vote was successfully created." }
       end
     elsif Current.user.fiscal_gral?
-      @vote = Vote.new(vote_params)
-      respond_to do |format|
-        if @vote.save
-          format.json { render json: { status: 'success', msg: 'Votos registrados' }, status: :created }
-          format.html { redirect_to votes_url, notice: "Vote was successfully created." }
-        else
-          format.json { render json: @vote.errors, status: :unprocessable_entity }
+      ActiveRecord::Base.transaction do 
+        for i in 1..params[:vote][:entry_votes].to_i do 
+          Vote.create(table_id: params[:vote][:table_id],
+            political_party_id: params[:vote][:political_party_id][i.to_s],
+            number: params[:vote][:number][i.to_s],
+            politician_rol_id: params[:vote][:politician_rol_id][i.to_s])
         end
+
+        table = Table.find(params[:vote][:table_id])
+        table.update(closed: true)
+      end
+      respond_to do |format|
+        format.json { render json: { status: 'success', msg: 'Votos registrados' }, status: :created }
+        format.html { redirect_to votes_url, notice: "Vote was successfully created." }
       end
     end
 

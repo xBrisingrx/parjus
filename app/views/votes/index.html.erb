@@ -1,13 +1,112 @@
 <h1>Registro de votos <%= @title %></h1>
 
-<% if current_user.fiscal? %>
-  <%= render ('fiscal_view')%>
-<% end %>
+<canvas id="bar_grafics" width="400" height="150" aria-label="Hello ARIA World" role="img" > <!-- grafico de barras --> </canvas>
 
-<% if current_user.fiscal? %>
-  <%= render ('fiscal_gral_view')%>
-<% end %>
+<div class="card g-brd-blue rounded g-mb-30">
+  <h3 class="card-header g-bg-blue g-brd-transparent g-color-white g-font-size-16 mb-2 rounded-0">
+    <i class="fa fa-book"></i>
+    Listado de votos por partido
+  </h3>
+   <div class="px-2  pb-2">
+    <table id="votes_by_party" class="table table-sm table-hover dt-responsive w-100 u-table--v1" data-show='show'>
+      <thead>
+        <tr>
+          <% @cols_parties.each do |name| %>
+            <th><%= name %></th>
+          <% end %>
+        </tr>
+      </thead>
 
-<% if current_user.admin? %>
-  "------"
-<% end %>
+      <tbody>
+        <% @political_parties.each do |party| %>
+          <tr>
+            <td> <%= party.name %> </td>
+            <% @politician_rols.each do |rol| %>
+              <td><%= Vote.by_party( party.id, rol.id ) %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<div class="card g-brd-primary rounded g-mb-30">
+  <h3 class="card-header g-bg-primary g-brd-transparent g-color-white g-font-size-16 mb-2 rounded-0">
+    <i class="fa fa-book"></i>
+    Listado de votos por institucion
+  </h3>
+   <div class="px-2  pb-2">
+    <table id="votes_tablew" class="table table-sm table-hover dt-responsive w-100 u-table--v1" data-show='show'>
+      <thead>
+        <tr>
+          <% @cols.each do |name| %>
+            <th><%= name %></th>
+          <% end %>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @institutions.each do |institution| %>
+          <tr>
+            <td rowspan="<%= @count_political_parties %>"> <%= institution.name %> </td>
+            <td rowspan="<%= @count_political_parties %>"> <%= institution.tables_closed  %> de <%= institution.tables.actives.count %> </td>
+            <td rowspan="<%= @count_political_parties %>"> <%= institution.fiscal.name %> </td>
+            <td><%= @political_parties.first.name %></td>
+            <% @politician_rols.each do |rol| %>
+              <td> <%= institution.count_votes( @political_parties.first.id, rol.id ) %></td>
+            <% end %>
+          </tr>
+            <% @political_parties.each do |party| %>
+              <% next if party.id == @political_parties.first.id %>
+              <tr>
+                <td> <%= party.name %> </td>
+                <% @politician_rols.each do |rol| %>
+                  <td><%= institution.count_votes( party.id, rol.id ) %></td>
+                <% end %>
+              </tr>
+            <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<script>
+  const ctx = document.getElementById('bar_grafics');
+  let chart_cols = [];
+  let chart_data = [];
+  
+  async function get_data() {
+    let result = await fetch('/votes/grafic_data')
+    let data = await result.json()
+    chart_cols = data.chart_cols;
+    chart_data = data.chart_data;
+    new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: chart_cols,
+      datasets: [{
+        label: '# Votos',
+        data: chart_data,
+        borderWidth: 1,
+        backgroundColor: 'rgba(54, 162, 235, 0.2)', // Color de fondo
+        borderColor: 'rgba(54, 162, 235, 1)', // Color del borde
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+  }
+  
+  get_data(chart_cols, chart_data)
+  
+  
+</script>

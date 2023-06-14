@@ -1,4 +1,5 @@
-<h1>Sedes</h1>
+<h1>Unidades básicas</h1>
+
 <%= link_to "<i class='fa fa-plus'></i> Registrar sede".html_safe, new_headquarter_path(), 
             remote: true, 
             class: 'btn u-btn-outline-primary u-btn-hover-v1-2 mb-2' %>
@@ -7,7 +8,7 @@
             locals: { table_id: 'headquarters', 
                       color: 'blue', 
                       icon: 'fa-gear',
-                      title: "Ciudades registradas", 
+                      title: "Unidades básicas y agrupaciones registradas", 
                       col_names: [ 'Nombre','Barrio', 'A cargo de', 'Acciones' ] }) %>
 
 <!-- Modal para eliminar person -->

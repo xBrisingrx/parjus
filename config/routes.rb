@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :votes do 
     get 'mesa', to: 'votes#by_table', on: :collection
     get 'institucion', to: 'votes#by_institution', on: :collection
+    get 'grafic_data', on: :collection
   end
   resources :tables_political_parties
   resources :politicians_parties

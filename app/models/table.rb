@@ -4,6 +4,7 @@
 #
 #  id             :bigint           not null, primary key
 #  active         :boolean          default(TRUE)
+#  closed         :boolean          default(FALSE)
 #  name           :string(255)      not null
 #  number         :integer          not null
 #  vouters        :integer
@@ -35,5 +36,6 @@ class Table < ApplicationRecord
   validates :number, presence: true 
   validates :vouters, presence: true
 
+  scope :actives, ->{ where(active:true) }
   
 end

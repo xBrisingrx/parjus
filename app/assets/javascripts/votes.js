@@ -1,4 +1,24 @@
 let votes_table
+let votes = {
+  grafica: '',
+  etiquetas: '',
+  datosVentas2020: '',
+  chargeBarGrafic(){
+    const data = this.fetch_grafic_data()
+    console.log('=>', data)
+
+  }, 
+  fetch_grafic_data(){
+    fetch('/votes/grafic_data')
+    .then( response => {
+      const datos = response.json()
+      console.log( datos )
+      return datos
+    })
+    .then( response => response )
+  }
+}
+
 $(document).ready(function(){
   votes_table = $("#votes_table").DataTable({'language': {'url': datatables_lang}})
 })

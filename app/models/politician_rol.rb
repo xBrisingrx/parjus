@@ -9,4 +9,7 @@
 #  updated_at :datetime         not null
 #
 class PoliticianRol < ApplicationRecord
+	validates :name, presence: true, 
+    uniqueness: { case_sensitive: false, message: "Ya existe un cargo con este nombre" }
+  scope :actives, -> { where(active: true) }
 end

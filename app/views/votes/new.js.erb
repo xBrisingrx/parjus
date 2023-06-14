@@ -17,3 +17,44 @@ $("#form-vote").on("ajax:success", function(event) {
 	let msg = JSON.parse( event.detail[2].response )
 	set_input_status_form('form-vote', 'vote', msg)
 })
+
+document.getElementById('form-vote').addEventListener('submit', e => {
+  e.preventDefault()
+  e.stopPropagation()
+  let form = new FormData()
+
+  form.append('vote[table_id]', e.target.querySelector('#vote_table_id').value )
+
+  const votes = document.getElementsByClassName('votes')
+  let votes_index = 1
+  for (let vote of votes) {
+    const political_party_id = vote.querySelector('#vote_political_party_id').value
+    const votes_rol = document.getElementsByClassName(`votes_rol_${political_party_id}`)
+
+    for (let vote_rol of votes_rol) {
+      vote_quantity = parseInt( vote_rol.querySelector('#vote_number').value )
+      if (!isNaN(vote_quantity) && vote_quantity > 0 ) {
+        form.append(`vote[political_party_id][${votes_index}]`, political_party_id )
+        form.append( `vote[number][${votes_index}]`, vote_quantity )
+        form.append( `vote[politician_rol_id][${votes_index}]`, vote_rol.querySelector('#vote_politician_rol_id').value )
+        votes_index++
+      }
+    }
+  }
+  form.append('vote[entry_votes]', votes_index )
+
+  fetch('<%= votes_path() %>', {
+    method: 'POST',
+    headers: {           
+        'X-CSRF-Token': document.getElementsByName('csrf-token')[0].content,
+      },
+      body: form
+  })
+  .then( response => response.json() )
+  .then( response => {
+    if (response.status === 'success') {
+      noty_alert(response.status, response.msg)
+      location.reload()
+    }
+  })
+})

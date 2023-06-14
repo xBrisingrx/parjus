@@ -13,22 +13,22 @@
     <%= form.hidden_field :table_id, value: @table.id %>
   <% end %>
 
-  <div class="form-group  row">
-    <%= form.label :political_party_id, 'Partido (*)', class:'col-sm-4 col-md-2 col-form-label g-mb-10' %>
-    <div class="col-sm-8 col-lg-6">
-      <%= form.select(:political_party_id, @parties.collect {|party| [party.name, party.id]}, { include_blank: true},
-                      class: 'form-control select-party', required: true) %>
-      <small class="form-control-feedback text-danger vote_party"></small>
+  
+  <% @parties.each do |party| %>
+    <div class="votes">
+      <strong> <%= party.name %> </strong>
+      <%= form.hidden_field :political_party_id, value: party.id %>
+      <div class="form-group row g-mb-10">
+        <% @politician_roles.each_with_index do |rol, index | %>
+          <div class="col-sm-6 col-md-4 mt-2 votes_rol_<%= party.id%>">
+            <%= form.text_field :number, class: "form-control u-form-control", placeholder: "#{rol.name} #{party.name}" %>
+            <%= form.hidden_field :politician_rol_id, value: rol.id %>
+            <small class="form-control-feedback text-danger person_name"></small>
+          </div>
+        <% end %>
+      </div>
     </div>
-  </div>
-
-  <div class="form-group row g-mb-10">
-    <%= form.label :number, 'Cantidad:', class: "col-sm-4 col-md-2 col-form-label g-mb-10" %><br>
-    <div class="col-sm-6 col-md-4">
-      <%= form.text_field :number, class: "form-control u-form-control", placeholder: 'Ingrese cantidad de votos' ,required: true  %>
-      <small class="form-control-feedback text-danger person_name"></small>
-    </div>
-  </div>
+  <% end %>
 
 
   <div class="actions">

@@ -12,6 +12,7 @@
 class PoliticalParty < ApplicationRecord
 	has_many :politicians_parties
 	accepts_nested_attributes_for :politicians_parties
+	scope :actives, -> { where(active:true) }
 
 	def show_politicians
 		politicians = ''
@@ -20,4 +21,5 @@ class PoliticalParty < ApplicationRecord
 		}
 		" => #{politicians} "
 	end
+
 end

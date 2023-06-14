@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_24_182731) do
+ActiveRecord::Schema.define(version: 2023_06_08_232144) do
 
   create_table "activity_histories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci", force: :cascade do |t|
     t.string "record_type"
@@ -164,6 +164,7 @@ ActiveRecord::Schema.define(version: 2023_05_24_182731) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "fiscal_id"
+    t.boolean "closed", default: false
     t.index ["fiscal_id"], name: "index_tables_on_fiscal_id"
     t.index ["institution_id"], name: "index_tables_on_institution_id"
   end
@@ -197,7 +198,9 @@ ActiveRecord::Schema.define(version: 2023_05_24_182731) do
     t.integer "number", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "politician_rol_id"
     t.index ["political_party_id"], name: "index_votes_on_political_party_id"
+    t.index ["politician_rol_id"], name: "index_votes_on_politician_rol_id"
     t.index ["table_id"], name: "index_votes_on_table_id"
   end
 
@@ -220,5 +223,6 @@ ActiveRecord::Schema.define(version: 2023_05_24_182731) do
   add_foreign_key "tables_political_parties", "political_parties"
   add_foreign_key "tables_political_parties", "tables"
   add_foreign_key "votes", "political_parties"
+  add_foreign_key "votes", "politician_rols"
   add_foreign_key "votes", "tables"
 end
