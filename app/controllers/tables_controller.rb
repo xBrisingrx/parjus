@@ -38,8 +38,8 @@ class TablesController < ApplicationController
         format.json { render json: { status: 'success', msg: 'Mesa registrada' }, status: :created }
         format.html { redirect_to table_url(@table), notice: "Table was successfully created." }
       else
-        format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @table.errors, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_entity }
       end
     end
   end
@@ -51,7 +51,7 @@ class TablesController < ApplicationController
         format.html { redirect_to table_url(@table), notice: "Table was successfully updated." }
         format.json { render :show, status: :ok, location: @table }
       else
-        format.json { render json: @table.errors, status: :unprocessable_entity }
+        format.json { render json: { status: 'error', msg: @table.errors }, status: :unprocessable_entity }
         format.html { render :edit, status: :unprocessable_entity }
       end
     end
