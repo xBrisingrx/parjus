@@ -11,44 +11,10 @@
   <div class="form-group row">
     <%= form.label :vouters, 'N° votantes: ', class: 'col-form-label col-sm-3 col-md-4' %>
     <div class="col-sm-9 col-md-6">
-      <%= form.text_field :vouters, class: 'form-control', required:true %>
+      <%= form.number_field :vouters, class: 'form-control', required:true %>
       <small class="invalid-feedback table_name"></small>
     </div>
   </div>
-
-  <div class="form-group row">
-    <div class="col-4 col-sm-4 col-md-4 col-lg-2">
-      <%= form.label :fiscal_id, 'A cargo de:', class:' col-form-label g-mb-10' %>
-    </div>
-    <div class="col-6 col-sm-6 col-md-6 col-lg-6">
-      <%= form.select(:fiscal_id, @fiscals.collect {|u| [u.name, u.id]}, { include_blank: true},
-                      class: 'form-control select-fiscal', required: true) %>
-      <small class="form-control-feedback text-danger table_fiscal_id"></small>
-    </div>
-  </div>
-
-  <div class="form-group row">
-    <div class="col-4 col-sm-4 col-md-4 col-lg-2">
-      <%= form.label :political_party_id, 'Partido politico', class:' col-form-label g-mb-10' %>
-    </div>
-    <div class="col-6 col-sm-6 col-md-6 col-lg-6">
-      <%= form.select(:political_party_id, @political_parties.collect {|p| [p.name, p.id]}, { include_blank: true},
-                      class: 'form-control select-political-parties') %>
-      <small class="form-control-feedback text-danger table_political_party_id"></small>
-    </div>
-    <div class="col-2 col-sm-2">
-      <button id="add_political_party" class="btn u-btn-teal"><i class="fa fa-plus"></i></button>
-    </div>
-  </div>
-
-  <table id="political_parties_table" class="table" style="display: none;">
-    <thead>
-      <th colspan="2">Partido</th>
-    </thead>
-    <tbody id="political_parties_list">
-      
-    </tbody>
-  </table>
 
   <div class="actions">
     <%= form.submit 'Guardar', class: 'btn u-btn-primary mr-2' %>

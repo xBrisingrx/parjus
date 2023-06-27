@@ -15,24 +15,24 @@ $("#modal").modal('show')
 // 	set_input_status_form('form-table', 'table', msg)
 // })
 count_political_parties = 0
-document.getElementById('add_political_party').addEventListener('click', e => {
-  e.preventDefault()
-  let political_party = document.querySelector('#table_political_party_id').options[document.querySelector('#table_political_party_id').selectedIndex]
-  if (political_party.value == '') {
-    noty_alert('info', 'No ha seleccionado ningun partido')
-    return
-  }
-  count_political_parties++
-  document.getElementById('political_parties_list').innerHTML += `
-    <tr class="political_party_to_add" id="political_party_${count_political_parties}">
-      <td id='td_political_party' data-value=${political_party.value}>${political_party.text}</td>
-      <td> <button type='button' class='btn btn-xs u-btn-red' onclick="remove_political_party('political_party_${count_political_parties}')"> <i class='fa fa-trash'> </i></button> </td>
-    </tr>
-  `
-  document.getElementById('political_parties_table').style.display = ''
-  $('#table_political_party_id option:selected').attr('disabled', 'disabled')
-  $('.select-political-parties').val('').trigger('change')
-})
+// document.getElementById('add_political_party').addEventListener('click', e => {
+//   e.preventDefault()
+//   let political_party = document.querySelector('#table_political_party_id').options[document.querySelector('#table_political_party_id').selectedIndex]
+//   if (political_party.value == '') {
+//     noty_alert('info', 'No ha seleccionado ningun partido')
+//     return
+//   }
+//   count_political_parties++
+//   document.getElementById('political_parties_list').innerHTML += `
+//     <tr class="political_party_to_add" id="political_party_${count_political_parties}">
+//       <td id='td_political_party' data-value=${political_party.value}>${political_party.text}</td>
+//       <td> <button type='button' class='btn btn-xs u-btn-red' onclick="remove_political_party('political_party_${count_political_parties}')"> <i class='fa fa-trash'> </i></button> </td>
+//     </tr>
+//   `
+//   document.getElementById('political_parties_table').style.display = ''
+//   $('#table_political_party_id option:selected').attr('disabled', 'disabled')
+//   $('.select-political-parties').val('').trigger('change')
+// })
 
 function remove_political_party(id) {
   document.getElementById(id).remove()
@@ -47,16 +47,16 @@ document.getElementById('form-table').addEventListener('submit', e => {
   e.stopPropagation()
   let form = new FormData()
   form.append('table[name]', e.target.querySelector('#table_name').value )
-  form.append('table[fiscal_id]', e.target.querySelector('#table_fiscal_id').value )
+  // form.append('table[fiscal_id]', e.target.querySelector('#table_fiscal_id').value )
   form.append('table[institution_id]', e.target.querySelector('#table_institution_id').value )
   form.append('table[vouters]', e.target.querySelector('#table_vouters').value )
 
-  const parties = document.getElementsByClassName('political_party_to_add')
-  let parties_index = 1
-  for (let party of parties) {
-    form.append( `table[tables_political_parties_attributes][${parties_index}][political_party_id]`, party.querySelector('#td_political_party').dataset.value )
-    parties_index++
-  }
+  // const parties = document.getElementsByClassName('political_party_to_add')
+  // let parties_index = 1
+  // for (let party of parties) {
+  //   form.append( `table[tables_political_parties_attributes][${parties_index}][political_party_id]`, party.querySelector('#td_political_party').dataset.value )
+  //   parties_index++
+  // }
 
   fetch('<%= tables_path() %>', {
     method: 'POST',
@@ -71,6 +71,9 @@ document.getElementById('form-table').addEventListener('submit', e => {
       noty_alert(response.status, response.msg)
       tables_table.ajax.reload(null,false)
       $("#modal").modal('hide')
+    } else {
+      // let msg = JSON.parse( event.detail[2].response )
+      set_input_status_form('form-table', 'table', response.msg)
     }
   })
 })

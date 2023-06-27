@@ -33,9 +33,20 @@ class Table < ApplicationRecord
   accepts_nested_attributes_for :tables_political_parties
 
   validates :name, presence: true 
-  validates :number, presence: true 
+  validates :number, presence: true, numericality: { only_integer: true }
   validates :vouters, presence: true
 
   scope :actives, ->{ where(active:true) }
-  
+
+  after_create :add_political_parties
+
+
+  private 
+
+  def add_political_parties
+    political_parties = PoliticalParty.actives 
+    political_parties.each do |party|
+      self.tables_political_parties.create( political_party: party )
+    end
+  end
 end
