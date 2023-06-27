@@ -1,37 +1,24 @@
-<%= form_with(model: neighborhood, local: true) do |form| %>
-  <% if neighborhood.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(neighborhood.errors.count, "error") %> prohibited this neighborhood from being saved:</h2>
+<%= form_with(model: @neighborhood, id: 'form-neighborhood') do |form| %>
 
-      <ul>
-      <% neighborhood.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+  <div class="form-group row g-mb-10">
+    <%= form.label :name, 'Nombre (*):', class: "col-sm-4 col-md-2 col-form-label g-mb-10" %><br>
+    <div class="col-sm-6 col-md-4">
+      <%= form.text_field :name, class: "form-control u-form-control", placeholder: 'Ingrese nombre' ,required: true  %>
+      <small class="form-control-feedback text-danger neighborhood_name"></small>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name %>
   </div>
 
-  <div class="field">
-    <%= form.label :description %>
-    <%= form.text_area :description %>
-  </div>
-
-  <div class="field">
-    <%= form.label :active %>
-    <%= form.check_box :active %>
-  </div>
-
-  <div class="field">
-    <%= form.label :city_id %>
-    <%= form.text_field :city_id %>
+  <div class="form-group row">
+    <%= form.label :description, 'Descripción:', class: "col-sm-4 col-md-2 col-form-label g-mb-10" %>
+    <div class="col-sm-6 col-md-4">
+      <%= form.text_area :description, 
+                            class: 'form-control u-textarea-expandable g-resize-none', 
+                            rows: 3 %>
+    </div>
   </div>
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit 'Guardar', class: 'btn u-btn-primary g-mr-10' %>
+    <button type="button" class="btn u-btn-darkred" data-dismiss="modal">Cerrar</button>
   </div>
 <% end %>

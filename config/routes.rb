@@ -13,7 +13,9 @@ Rails.application.routes.draw do
   resources :affiliated_rols
   resources :headquarters
   resources :dni_types
-  resources :tables
+  resources :tables do 
+    get 'by_institution', on: :collection
+  end
   resources :institutions
   resources :institution_types
 

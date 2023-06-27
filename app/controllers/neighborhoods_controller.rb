@@ -39,11 +39,11 @@ class NeighborhoodsController < ApplicationController
   def update
     respond_to do |format|
       if @neighborhood.update(neighborhood_params)
+        format.json { render json: {status: 'success', msg: 'Datos actualizados'}, status: :ok, location: @neighborhood }
         format.html { redirect_to neighborhood_url(@neighborhood), notice: "Neighborhood was successfully updated." }
-        format.json { render :show, status: :ok, location: @neighborhood }
       else
-        format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @neighborhood.errors, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_entity }
       end
     end
   end
@@ -64,9 +64,9 @@ class NeighborhoodsController < ApplicationController
     neightborhoods = Neighborhood.where("name LIKE ?", "%#{name}%" ).where.not(id: id)
     
     # puts "\n cantidad de personas afectadas => #{neightborhoods.joins(:people).count} \n"
+    # byebug
     ids = neightborhoods.pluck(:id)
     people = Person.where(neighborhood_id: ids)
-    puts "\n cantidad de barrios => #{people.count} \n"
 
     people.each do |person|
       person.update(neighborhood_id: id)

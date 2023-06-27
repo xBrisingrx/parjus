@@ -26,4 +26,5 @@ class Neighborhood < ApplicationRecord
   validates :name, presence: true, 
     uniqueness: { case_sensitive: false, message: "Ya existe un barrio registrada con este nombre" }
   scope :actives, -> { where(active: true) }
+
 end

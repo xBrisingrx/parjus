@@ -51,7 +51,9 @@
         <% @institutions.each do |institution| %>
           <tr>
             <td rowspan="<%= @count_political_parties %>"> <%= institution.name %> </td>
-            <td rowspan="<%= @count_political_parties %>"> <%= institution.tables_closed  %> de <%= institution.tables.actives.count %> </td>
+            <td rowspan="<%= @count_political_parties %>"> 
+              <%= link_to "#{institution.tables_closed} de #{institution.tables.actives.count}", by_institution_tables_path(institution_id: institution.id), remote: true %> 
+            </td>
             <td rowspan="<%= @count_political_parties %>"> <%= institution.fiscal.name %> </td>
             <td><%= @political_parties.first.name %></td>
             <% @politician_rols.each do |rol| %>
@@ -71,6 +73,10 @@
       </tbody>
     </table>
   </div>
+</div>
+
+<div class="modal fade" id="tables_by_institution" role="dialog"
+     aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 </div>
 
 

@@ -1,0 +1,4 @@
+$("#tables_by_institution").html("<%= j (render partial: 'by_institution', locals: {tables: @tables } ) %>")
+
+
+$("#tables_by_institution").modal('show')

@@ -16,6 +16,10 @@ class TablesController < ApplicationController
   def show
   end
 
+  def by_institution
+    @tables = Table.where(institution_id: params[:institution_id])
+  end
+
   # GET /tables/new
   def new
     @table = Table.new
