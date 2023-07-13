@@ -40,6 +40,12 @@ class Table < ApplicationRecord
 
   after_create :add_political_parties
 
+  def self.porcent_tables_closed
+    closeds = Table.where(closed: true).where(active:true).count
+    all_tables = Table.where(active:true).count
+    porcent = (closeds * 100) / all_tables
+    porcent
+  end
 
   private 
 

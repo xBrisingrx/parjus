@@ -17,6 +17,7 @@ class VotesController < ApplicationController
         @cols_parties << rol.name
       end
       @institutions = Institution.actives
+      @porcent_tables_closed = Table.porcent_tables_closed
     end
   end
 
