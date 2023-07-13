@@ -1,0 +1,31 @@
+  <% @parties.each do |party| %>
+    <div class="votes">
+      <strong> <%= party.name %> </strong>
+      <div class="form-group row g-mb-10">
+        <% @politician_roles.each do |rol | %>
+          <div class="col-sm-6 col-md-4 mt-2">
+            <%= label :rol_name, rol.name %>
+            <input type="text" disabled value="<%= @table.votes.where( political_party_id: party.id, politician_rol_id: rol.id ).first&.number %>",
+              class='form-control u-form-control'>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <% @votes_categories.each do |category|%>
+    <div class="votes">
+        <strong> <%= category[:name] %> </strong>
+        <div class="form-group row g-mb-10">
+          <% @politician_roles.each do |rol | %>
+            <div class="col-sm-6 col-md-4 mt-2">
+              <%= label :rol_name, rol.name %>
+              <input type="text" disabled value="<%= @table.votes.where( category: category[:value], politician_rol_id: rol.id ).first&.number %>",
+                class='form-control u-form-control'>
+            </div>
+          <% end %>
+        </div>
+      </div>
+  <% end %>
+
+  

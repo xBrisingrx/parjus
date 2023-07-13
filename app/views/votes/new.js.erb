@@ -26,7 +26,9 @@ document.getElementById('form-vote').addEventListener('submit', e => {
   form.append('vote[table_id]', e.target.querySelector('#vote_table_id').value )
 
   const votes = document.getElementsByClassName('votes')
-  let votes_index = 1
+  const other_votes = document.getElementsByClassName('other_votes')
+
+  let votes_index = 0
   for (let vote of votes) {
     const political_party_id = vote.querySelector('#vote_political_party_id').value
     const votes_rol = document.getElementsByClassName(`votes_rol_${political_party_id}`)
@@ -34,15 +36,30 @@ document.getElementById('form-vote').addEventListener('submit', e => {
     for (let vote_rol of votes_rol) {
       vote_quantity = parseInt( vote_rol.querySelector('#vote_number').value )
       if (!isNaN(vote_quantity) && vote_quantity > 0 ) {
+        votes_index++
         form.append(`vote[political_party_id][${votes_index}]`, political_party_id )
         form.append( `vote[number][${votes_index}]`, vote_quantity )
         form.append( `vote[politician_rol_id][${votes_index}]`, vote_rol.querySelector('#vote_politician_rol_id').value )
-        votes_index++
+        form.append( `vote[category][${votes_index}]`, vote_rol.querySelector('#vote_category').value )
       }
     }
   }
-  form.append('vote[entry_votes]', votes_index )
 
+  for (let vote of other_votes) {
+    const votes_value = vote.getElementsByClassName('votes_value')
+    for (let vote of votes_value) {
+        vote_quantity = parseInt( vote.querySelector('#vote_number').value )
+        if (!isNaN(vote_quantity) && vote_quantity > 0 ) {
+          votes_index++
+          form.append( `vote[number][${votes_index}]`, vote_quantity )
+          form.append( `vote[politician_rol_id][${votes_index}]`, vote.querySelector('#vote_politician_rol_id').value )
+          form.append( `vote[category][${votes_index}]`, vote.querySelector('#vote_category').value )
+        }
+      }
+  }
+
+  form.append('vote[entry_votes]', votes_index )
+  console.log('cantidad de votos =>', votes_index)
   fetch('<%= votes_path() %>', {
     method: 'POST',
     headers: {           
@@ -58,3 +75,7 @@ document.getElementById('form-vote').addEventListener('submit', e => {
     }
   })
 })
+
+// document.getElementsByClassName(`count_vote`).addEventListener( 'change', () => {
+//   const value = e.target.value 
+// } )

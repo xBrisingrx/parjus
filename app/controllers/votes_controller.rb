@@ -50,22 +50,37 @@ class VotesController < ApplicationController
         hash_data = { 'table' => "Mesa #{table.name}" }
         hash_data['party'] = p.name 
         hash_data['votes'] = votes[p.id]
+        hash_data['table_id'] = table.id
         @data << hash_data
       end
     end
   end
 
+  def show_by_table
+    @table = Table.find params[:id]
+    @parties = PoliticalParty.all.order(name: :asc)
+    @politician_roles = PoliticianRol.actives.order(name: :asc)
+    @votes_categories = [
+      { name: 'Total votos agrupaciones politicas:', value: 'agrupacion' },
+      { name: 'Votos nulos:', value: 'nulo' },
+      { name: 'Votos recorridos:', value: 'recorrido' },
+      { name: 'Votos en blanco:', value: 'blanco' }
+    ]
+    
+  end
+
   def grafic_data
     @politician_rols = PoliticianRol.actives.order(:name)
+    rol_id = params[:rol_id]
     @political_parties = PoliticalParty.actives
     @chart_data = []
     @chart_cols = []
-    @politician_rols.each do |rol|
+    # @politician_rols.each do |rol|
       @political_parties.each do |party|
-        @chart_cols << "#{party.name} #{rol.name}"
-        @chart_data << Vote.by_party( party.id, rol.id )
+        @chart_cols << "#{party.name}"
+        @chart_data << Vote.by_party( party.id, rol_id )
       end
-    end
+    # end
     render json: { 'chart_cols': @chart_cols, 'chart_data': @chart_data }
   end
 
@@ -100,9 +115,15 @@ class VotesController < ApplicationController
     if Current.user.fiscal?
       ActiveRecord::Base.transaction do 
         for i in 1..params[:cant].to_i do 
-          Vote.create( table_id: params[:table_id],
-            political_party_id: params["political_party_id_#{i}".to_sym],
-            number: params["number_#{i}".to_sym] )
+          vote = Vote.new( table_id: params[:table_id],
+            number: params["number_#{i}".to_sym],
+            category: params["category_#{i}".to_sym],
+          )
+
+          if params["category_#{i}".to_sym] == 'normal'
+            vote.political_party_id = params["political_party_id_#{i}".to_sym]
+          end
+          vote.save
         end
       end
       respond_to do |format|
@@ -112,10 +133,21 @@ class VotesController < ApplicationController
     elsif Current.user.fiscal_gral?
       ActiveRecord::Base.transaction do 
         for i in 1..params[:vote][:entry_votes].to_i do 
-          Vote.create(table_id: params[:vote][:table_id],
-            political_party_id: params[:vote][:political_party_id][i.to_s],
+          vote = Vote.new(
             number: params[:vote][:number][i.to_s],
-            politician_rol_id: params[:vote][:politician_rol_id][i.to_s])
+            politician_rol_id: params[:vote][:politician_rol_id][i.to_s],
+            category: params[:vote][:category][i.to_s],
+            table_id: params[:vote][:table_id],
+          )
+
+          if params[:vote][:category][i.to_s] == 'normal'
+            vote.political_party_id = params[:vote][:political_party_id][i.to_s]
+          end
+          vote.save!
+          # Vote.create(table_id: params[:vote][:table_id],
+          #   political_party_id: params[:vote][:political_party_id][i.to_s],
+          #   number: params[:vote][:number][i.to_s],
+          #   politician_rol_id: params[:vote][:politician_rol_id][i.to_s])
         end
 
         table = Table.find(params[:vote][:table_id])
@@ -162,6 +194,6 @@ class VotesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def vote_params
-      params.require(:vote).permit(:table_id, :political_party_id, :number)
+      params.require(:vote).permit(:table_id, :political_party_id, :number, :category)
     end
 end

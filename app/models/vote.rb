@@ -24,10 +24,19 @@
 #
 class Vote < ApplicationRecord
   belongs_to :table
-  belongs_to :political_party
+  belongs_to :political_party, optional: true
   belongs_to :politician_rol
 
   validates :number, presence: true, numericality: { only_integer: true }
+  validates :category, presence: true
+
+  enum category: {
+    normal: 0,
+    blanco: 1,
+    nulo: 2,
+    recorrido: 3,
+    agrupacion: 4
+  }
 
   def self.by_party party_id, rol_id
     votes = Vote.where( political_party_id: party_id, politician_rol_id: rol_id ).sum(:number)

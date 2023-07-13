@@ -1,6 +1,24 @@
 <h1>Registro de votos <%= @title %></h1>
 
-<canvas id="bar_grafics" width="400" height="150" aria-label="Hello ARIA World" role="img" > <!-- grafico de barras --> </canvas>
+
+<ul class="nav justify-content-center u-nav-v1-1 u-nav-primary u-nav-rounded-3 g-mb-20" role="tablist" 
+    data-target="nav-1-1-primary-hor-center" data-tabs-mobile-type="slide-up-down" data-btn-classes="btn btn-md btn-block u-btn-outline-primary g-mb-20">
+  <% @politician_rols.each do |rol| %>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#rol_<%= rol.id %>" role="tab"><%= rol.name %></a>
+    </li>
+  <% end %>
+</ul>
+
+
+
+<div id="nav-1-1-primary-hor-center" class="tab-content">
+  <% @politician_rols.each do |rol| %>
+    <div class="tab-pane fade" id="rol_<%= rol.id %>" role="tabpanel">
+      <canvas id="grafic_rol_<%= rol.id %>" width="400" height="150" aria-label="Hello ARIA World" role="img" > <!-- grafico de barras --> </canvas>
+    </div>
+  <% end %>
+</div>
 
 <div class="card g-brd-blue rounded g-mb-30">
   <h3 class="card-header g-bg-blue g-brd-transparent g-color-white g-font-size-16 mb-2 rounded-0">
@@ -85,34 +103,33 @@
   let chart_cols = [];
   let chart_data = [];
   
-  async function get_data() {
-    let result = await fetch('/votes/grafic_data')
+  async function get_data(rol_id, rol_name) {
+    let result = await fetch(`/votes/grafic_data?rol_id=${rol_id}`)
     let data = await result.json()
     chart_cols = data.chart_cols;
     chart_data = data.chart_data;
-    new Chart(ctx, {
+    const div_content = document.getElementById(`grafic_rol_${rol_id}`);
+    new Chart(div_content, {
     type: 'bar',
     data: {
-      labels: chart_cols,
+      labels: data.chart_cols,
       datasets: [{
-        label: '# Votos',
-        data: chart_data,
+        label: `# ${rol_name}`,
+        data: data.chart_data,
         borderWidth: 1,
         backgroundColor: 'rgba(54, 162, 235, 0.2)', // Color de fondo
         borderColor: 'rgba(54, 162, 235, 1)', // Color del borde
       }]
     },
     options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
+      indexAxis: 'y',
     }
   });
   }
   
-  get_data(chart_cols, chart_data)
+  <% @politician_rols.each do |rol| %>
+    get_data(<%= rol.id %> , "<%= rol.name %>")
+  <%end%>
   
   
 </script>

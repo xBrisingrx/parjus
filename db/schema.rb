@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_08_232144) do
+ActiveRecord::Schema.define(version: 2023_07_13_001134) do
 
   create_table "activity_histories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci", force: :cascade do |t|
     t.string "record_type"
@@ -65,6 +65,7 @@ ActiveRecord::Schema.define(version: 2023_06_08_232144) do
 
   create_table "headquarters", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci", force: :cascade do |t|
     t.string "name", null: false
+    t.text "description"
     t.bigint "neighborhood_id"
     t.boolean "active", default: true
     t.datetime "created_at", null: false
@@ -199,6 +200,7 @@ ActiveRecord::Schema.define(version: 2023_06_08_232144) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "politician_rol_id"
+    t.integer "category", default: 0
     t.index ["political_party_id"], name: "index_votes_on_political_party_id"
     t.index ["politician_rol_id"], name: "index_votes_on_politician_rol_id"
     t.index ["table_id"], name: "index_votes_on_table_id"

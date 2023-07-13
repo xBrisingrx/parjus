@@ -20,9 +20,10 @@
       <%= form.hidden_field :political_party_id, value: party.id %>
       <div class="form-group row g-mb-10">
         <% @politician_roles.each_with_index do |rol, index | %>
-          <div class="col-sm-6 col-md-4 mt-2 votes_rol_<%= party.id%>">
+          <div class="col-sm-6 col-md-4 mt-2 votes_rol_<%= party.id%> count_vote">
             <%= form.text_field :number, class: "form-control u-form-control", placeholder: "#{rol.name} #{party.name}" %>
             <%= form.hidden_field :politician_rol_id, value: rol.id %>
+            <%= form.hidden_field :category, value: :normal %>
             <small class="form-control-feedback text-danger person_name"></small>
           </div>
         <% end %>
@@ -30,6 +31,72 @@
     </div>
   <% end %>
 
+  <div class="other_votes">
+    <strong> Total votos agrupaciones politicas: </strong>
+    <div class="form-group row g-mb-10">
+      <% @politician_roles.each do |rol | %>
+        <div class="col-sm-6 col-md-4 mt-2 votes_value">
+          <%= form.text_field :number, class: "form-control u-form-control", placeholder: "" %>
+          <%= form.hidden_field :politician_rol_id, value: rol.id %>
+          <%= form.hidden_field :category, value: :agrupacion %>
+          <small class="form-control-feedback text-danger person_name"></small>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="other_votes">
+    <strong> Votos nulos: </strong>
+    <div class="form-group row g-mb-10">
+      <% @politician_roles.each do |rol | %>
+        <div class="col-sm-6 col-md-4 mt-2 votes_value">
+          <%= form.text_field :number, class: "form-control u-form-control", placeholder: "" %>
+          <%= form.hidden_field :politician_rol_id, value: rol.id %>
+          <%= form.hidden_field :category, value: :nulo %>
+          <small class="form-control-feedback text-danger person_name"></small>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="other_votes">
+    <strong> Votos recorridos: </strong>
+    <div class="form-group row g-mb-10">
+      <% @politician_roles.each do |rol | %>
+        <div class="col-sm-6 col-md-4 mt-2 votes_value">
+          <%= form.text_field :number, class: "form-control u-form-control", placeholder: "" %>
+          <%= form.hidden_field :politician_rol_id, value: rol.id %>
+          <%= form.hidden_field :category, value: :recorrido %>
+          <small class="form-control-feedback text-danger person_name"></small>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="other_votes">
+    <strong> Votos en blanco: </strong>
+    <div class="form-group row g-mb-10">
+      <% @politician_roles.each do |rol | %>
+        <div class="col-sm-6 col-md-4 mt-2 votes_value">
+          <%= form.text_field :number, class: "form-control u-form-control", placeholder: "" %>
+          <%= form.hidden_field :politician_rol_id, value: rol.id %>
+          <%= form.hidden_field :category, value: :blanco %>
+          <small class="form-control-feedback text-danger person_name"></small>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="total">
+    <strong> Total de votos: </strong>
+    <div class="form-group row g-mb-10">
+      <% @politician_roles.each do |rol | %>
+        <div class="col-sm-6 col-md-4 mt-2">
+          <input type="text" disabled class="form-control u-form-control" id="votes_rol_<%= rol.id %>" placeholder="Total de votos de <%= rol.name %>">
+        </div>
+      <% end %>
+    </div>
+  </div>
 
   <div class="actions">
     <%= form.submit 'Guardar', class: 'btn u-btn-primary g-mr-10' %>
