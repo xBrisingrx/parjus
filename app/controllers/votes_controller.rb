@@ -9,7 +9,7 @@ class VotesController < ApplicationController
     if Current.user.admin?
       @cols = [ 'Institucion', 'Mesas cerradas', 'Referente' ,'Partidos' ]
       @cols_parties = [ 'Partido' ]
-      @politician_rols = PoliticianRol.actives.order(:name)
+      @politician_rols = PoliticianRol.actives
       @political_parties = PoliticalParty.actives
       @count_political_parties = @political_parties.count
       @politician_rols.each do |rol|
@@ -36,12 +36,22 @@ class VotesController < ApplicationController
   def by_institution # vista de fiscal general
     @institution = Institution.find_by_fiscal_id(current_user.id)
     @tables = @institution.tables
+    @politician_rols = PoliticianRol.actives
+    @political_parties = PoliticalParty.actives
+    @count_political_parties = @political_parties.count
     @votos_por_mesa = []
     @tables.each do |table|
       @votos_por_mesa << table.votes.group(:political_party_id).sum(:number)
     end
 
-    @parties = PoliticalParty.all.order(:name)
+    @cols = [ 'Mesa', 'Partidos']
+    @politician_rols.each do |rol|
+      @cols << rol.name 
+    end
+
+    @cols << 'Acciones'
+
+    @parties = PoliticalParty.all
     @title = "de la institution #{@institution.name}"
     @data = []
     @tables.each do |table|
@@ -59,19 +69,18 @@ class VotesController < ApplicationController
 
   def show_by_table
     @table = Table.find params[:id]
-    @parties = PoliticalParty.all.order(name: :asc)
-    @politician_roles = PoliticianRol.actives.order(name: :asc)
+    @parties = PoliticalParty.all
+    @politician_roles = PoliticianRol.actives
     @votes_categories = [
-      { name: 'Total votos agrupaciones politicas:', value: 'agrupacion' },
       { name: 'Votos nulos:', value: 'nulo' },
       { name: 'Votos recorridos:', value: 'recorrido' },
       { name: 'Votos en blanco:', value: 'blanco' }
     ]
-    
+    @title_modal = "Votos ingresados en la mesa ##{@table.name}"
   end
 
   def grafic_data
-    @politician_rols = PoliticianRol.actives.order(:name)
+    @politician_rols = PoliticianRol.actives
     rol_id = params[:rol_id]
     @political_parties = PoliticalParty.actives
     @chart_data = []
@@ -92,17 +101,22 @@ class VotesController < ApplicationController
   # GET /votes/new
   def new
     @title_modal = "Registrar voto"
-    @politician_roles = PoliticianRol.actives.order(name: :asc)
+    @politician_roles = PoliticianRol.actives
     @vote = Vote.new
+
+    @other_votes = Array.new 
+    @other_votes << { type: :nulo, title: 'Votos nulos', color: 'blue' }
+    @other_votes << { type: :recorrido, title: 'Votos recorridos', color: 'indigo' }
+    @other_votes << { type: :blanco, title: 'Votos en blanco', color: 'pink' }
 
     if current_user.fiscal_gral?
       @tables = Institution.find_by_fiscal_id(current_user.id).tables.where('tables.closed = false').order( name: :asc)
-      @parties = PoliticalParty.all.order(name: :asc)
+      @parties = PoliticalParty.all
       @form = 'form'
     else
       # fiscal de mesa
       @table = Table.find_by_fiscal_id(current_user.id)
-      @parties = @table.political_parties.order(name: :asc)
+      @parties = @table.political_parties
       @form = 'form_by_table'
     end
   end
@@ -128,7 +142,7 @@ class VotesController < ApplicationController
         end
       end
       respond_to do |format|
-        format.json { render json: { status: 'success', msg: 'Votos registrados' }, status: :created }
+        format.json { render json: { status: 'success', msg: 'Votos registrados', url: votes_path }, status: :created }
         format.html { redirect_to votes_url, notice: "Vote was successfully created." }
       end
     elsif Current.user.fiscal_gral?

@@ -1,27 +1,20 @@
-<%= form_with(model: @vote, id: 'form-vote') do |form| %>
-
-  <% if current_user.rol == 'fiscal_gral' %>
-    <div class="form-group  row">
+<%= form_with(model: @vote, id: 'form-vote', class: 'mb-4') do |form| %>
+<div class="form-group  row">
       <%= form.label :table_id, 'Mesa (*)', class:'col-sm-4 col-md-2 col-form-label g-mb-10' %>
       <div class="col-sm-8 col-lg-6">
         <%= form.select(:table_id, @tables.collect {|table| [table.name, table.id]}, { include_blank: true},
                         class: 'form-control select-table', required: true) %>
         <small class="form-control-feedback text-danger vote_table"></small>
       </div>
-    </div>
-  <% else %>
-    <%= form.hidden_field :table_id, value: @table.id %>
-  <% end %>
-
-  
+    </div>  
   <% @parties.each do |party| %>
     <div class="votes">
       <strong> <%= party.name %> </strong>
       <%= form.hidden_field :political_party_id, value: party.id %>
       <div class="form-group row g-mb-10">
         <% @politician_roles.each_with_index do |rol, index | %>
-          <div class="col-sm-6 col-md-4 mt-2 votes_rol_<%= party.id%> count_vote">
-            <%= form.text_field :number, class: "form-control u-form-control", placeholder: "#{rol.name} #{party.name}" %>
+          <div class="col-sm-6 col-md-4 mt-2 votes_rol_<%= party.id%> rol_<%= rol.id%>">
+            <%= form.text_field :number, class: "form-control u-form-control", placeholder: "#{rol.name} #{party.name}", onchange: "votes.count_votes(#{rol.id})" %>
             <%= form.hidden_field :politician_rol_id, value: rol.id %>
             <%= form.hidden_field :category, value: :normal %>
             <small class="form-control-feedback text-danger person_name"></small>
@@ -31,75 +24,50 @@
     </div>
   <% end %>
 
-  <div class="other_votes">
-    <strong> Total votos agrupaciones politicas: </strong>
+  <div class="u-divider u-divider-solid u-divider-center g-brd-gray-light-v3 g-my-30">
+    <i class="fa fa-circle u-divider__icon g-bg-white g-color-gray-light-v3"></i>
+  </div>
+
+  <div class="agrupation_votes">
+    <span class="u-label g-bg-teal g-rounded-3 g-mr-10 g-mb-5 g-mt-15">Total votos agrupaciones politicas: </span>
     <div class="form-group row g-mb-10">
       <% @politician_roles.each do |rol | %>
-        <div class="col-sm-6 col-md-4 mt-2 votes_value">
-          <%= form.text_field :number, class: "form-control u-form-control", placeholder: "" %>
-          <%= form.hidden_field :politician_rol_id, value: rol.id %>
-          <%= form.hidden_field :category, value: :agrupacion %>
-          <small class="form-control-feedback text-danger person_name"></small>
+        <div id="agrupacion_<%= rol.id %>" class="col-sm-6 col-md-4 mt-2">
+          <%= form.text_field :number, class: "form-control u-form-control", placeholder: rol.name, disabled: true %>
         </div>
       <% end %>
     </div>
   </div>
 
+<% @other_votes.each do | other | %>
   <div class="other_votes">
-    <strong> Votos nulos: </strong>
+    <span class="u-label g-bg-<%= other[:color] %> g-rounded-3 g-mr-10 g-mb-5 g-mt-15"><%= other[:title] %>:</span>
     <div class="form-group row g-mb-10">
       <% @politician_roles.each do |rol | %>
-        <div class="col-sm-6 col-md-4 mt-2 votes_value">
-          <%= form.text_field :number, class: "form-control u-form-control", placeholder: "" %>
+        <div class="col-sm-6 col-md-4 mt-2 other_votes_rol_<%= rol.id%>">
+          <%= form.text_field :number, class: "form-control u-form-control", placeholder: rol.name, onchange: "votes.count_votes(#{rol.id})" %>
           <%= form.hidden_field :politician_rol_id, value: rol.id %>
-          <%= form.hidden_field :category, value: :nulo %>
+          <%= form.hidden_field :category, value: other[:type] %>
           <small class="form-control-feedback text-danger person_name"></small>
         </div>
       <% end %>
     </div>
   </div>
+<% end %>
 
-  <div class="other_votes">
-    <strong> Votos recorridos: </strong>
-    <div class="form-group row g-mb-10">
-      <% @politician_roles.each do |rol | %>
-        <div class="col-sm-6 col-md-4 mt-2 votes_value">
-          <%= form.text_field :number, class: "form-control u-form-control", placeholder: "" %>
-          <%= form.hidden_field :politician_rol_id, value: rol.id %>
-          <%= form.hidden_field :category, value: :recorrido %>
-          <small class="form-control-feedback text-danger person_name"></small>
-        </div>
-      <% end %>
-    </div>
+<div class="total">
+  <strong> Total de votos: </strong>
+  <div class="form-group row g-mb-10">
+    <% @politician_roles.each do |rol | %>
+      <div class="col-sm-6 col-md-4 mt-2">
+        <input type="text" disabled class="form-control u-form-control" id="all_votes_rol_<%= rol.id %>" placeholder="Total de votos de <%= rol.name %>">
+      </div>
+    <% end %>
   </div>
-
-  <div class="other_votes">
-    <strong> Votos en blanco: </strong>
-    <div class="form-group row g-mb-10">
-      <% @politician_roles.each do |rol | %>
-        <div class="col-sm-6 col-md-4 mt-2 votes_value">
-          <%= form.text_field :number, class: "form-control u-form-control", placeholder: "" %>
-          <%= form.hidden_field :politician_rol_id, value: rol.id %>
-          <%= form.hidden_field :category, value: :blanco %>
-          <small class="form-control-feedback text-danger person_name"></small>
-        </div>
-      <% end %>
-    </div>
-  </div>
-
-  <div class="total">
-    <strong> Total de votos: </strong>
-    <div class="form-group row g-mb-10">
-      <% @politician_roles.each do |rol | %>
-        <div class="col-sm-6 col-md-4 mt-2">
-          <input type="text" disabled class="form-control u-form-control" id="votes_rol_<%= rol.id %>" placeholder="Total de votos de <%= rol.name %>">
-        </div>
-      <% end %>
-    </div>
-  </div>
+</div>
 
   <div class="actions">
     <%= form.submit 'Guardar', class: 'btn u-btn-primary g-mr-10' %>
-    <button type="button" class="btn u-btn-darkred" data-dismiss="modal">Cerrar</button>
+    <%= link_to 'Volver', votes_path, class: 'btn u-btn-darkred' %>
   </div>
 <% end %>

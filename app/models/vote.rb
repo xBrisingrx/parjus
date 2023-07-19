@@ -35,8 +35,7 @@ class Vote < ApplicationRecord
     normal: 0,
     blanco: 1,
     nulo: 2,
-    recorrido: 3,
-    agrupacion: 4
+    recorrido: 3
   }
 
   def self.by_party party_id, rol_id

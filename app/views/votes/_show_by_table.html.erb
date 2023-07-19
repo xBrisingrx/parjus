@@ -13,6 +13,19 @@
     </div>
   <% end %>
 
+  <div class="votes">
+    <strong> Total votos agrupaciones politicas: </strong>
+    <div class="form-group row g-mb-10">
+      <% @politician_roles.each do |rol | %>
+        <div class="col-sm-6 col-md-4 mt-2">
+          <%= label :rol_name, rol.name %>
+          <input type="text" disabled value="<%= Vote.where( table_id: @table.id, politician_rol_id: rol.id ).sum(:number) %>",
+            class='form-control u-form-control'>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
   <% @votes_categories.each do |category|%>
     <div class="votes">
         <strong> <%= category[:name] %> </strong>
@@ -28,4 +41,17 @@
       </div>
   <% end %>
 
-  
+  <div class="votes">
+    <strong> Total de votos: </strong>
+    <div class="form-group row g-mb-10">
+      <% @politician_roles.each do |rol | %>
+        <div class="col-sm-6 col-md-4 mt-2">
+          <%= label :rol_name, rol.name %>
+          <input type="text" disabled value="",
+            class='form-control u-form-control'>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <button type="button" class="btn u-btn-primary" data-dismiss="modal">Cerrar</button>

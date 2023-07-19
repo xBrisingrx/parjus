@@ -47,6 +47,20 @@ class Table < ApplicationRecord
     porcent
   end
 
+  def count_votes political_party_id, politician_rol_id
+    # votes = self.joins(:votes)
+    data = self.votes.select('votes.id, votes.number').where("votes.political_party_id = #{political_party_id}").where("votes.politician_rol_id = #{politician_rol_id}")
+    if data.blank?
+      return 0 
+    else
+      sum_votes = 0
+      data.each do |d|
+        sum_votes += d.number
+      end
+      return sum_votes
+    end
+  end
+
   private 
 
   def add_political_parties
