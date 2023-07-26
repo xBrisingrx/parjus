@@ -5,7 +5,6 @@
 #  id             :bigint           not null, primary key
 #  active         :boolean          default(TRUE)
 #  closed         :boolean          default(FALSE)
-#  name           :string(255)      not null
 #  number         :integer          not null
 #  vouters        :integer
 #  created_at     :datetime         not null
@@ -31,11 +30,9 @@ class Table < ApplicationRecord
   belongs_to :fiscal, class_name: 'User', optional: true
 
   accepts_nested_attributes_for :tables_political_parties
-
-  validates :name, presence: true 
-  validates :number, presence: true, numericality: { only_integer: true }
-  validates :vouters, presence: true
-
+  
+  validates :number, presence: true, numericality: { only_integer: true }, uniqueness: true
+  # validates :vouters, presence: true
   scope :actives, ->{ where(active:true) }
 
   after_create :add_political_parties

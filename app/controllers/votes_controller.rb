@@ -26,7 +26,7 @@ class VotesController < ApplicationController
     @votes = @table.votes
     @votes = @votes.group(:political_party_id).sum(:number)
     @parties = @table.political_parties.order('political_parties.name')
-    @title = "de la mesa #{@table.name}"
+    @title = "de la mesa #{@table.number}"
     @data = []
     @parties.each do |p|
       @data << { 'party'=> p.name, 'votes' => @votes[p.id] }
@@ -36,6 +36,8 @@ class VotesController < ApplicationController
   def by_institution # vista de fiscal general
     @institution = Institution.find_by_fiscal_id(current_user.id)
     @tables = @institution.tables
+    @total_tables = @tables.count 
+    @closed_tables = @institution.tables.where(closed: true).count
     @politician_rols = PoliticianRol.actives
     @political_parties = PoliticalParty.actives
     @count_political_parties = @political_parties.count
@@ -58,7 +60,7 @@ class VotesController < ApplicationController
       votes = table.votes
       votes = votes.group(:political_party_id).sum(:number)
       @parties.each do |p|
-        hash_data = { 'table' => "Mesa #{table.name}" }
+        hash_data = { 'table' => "Mesa #{table.number}" }
         hash_data['party'] = p.name 
         hash_data['votes'] = votes[p.id]
         hash_data['table_id'] = table.id
@@ -76,7 +78,7 @@ class VotesController < ApplicationController
       { name: 'Votos recorridos:', value: 'recorrido' },
       { name: 'Votos en blanco:', value: 'blanco' }
     ]
-    @title_modal = "Votos ingresados en la mesa ##{@table.name}"
+    @title_modal = "Votos ingresados en la mesa ##{@table.number}"
   end
 
   def grafic_data
@@ -110,7 +112,7 @@ class VotesController < ApplicationController
     @other_votes << { type: :blanco, title: 'Votos en blanco', color: 'pink' }
 
     if current_user.fiscal_gral?
-      @tables = Institution.find_by_fiscal_id(current_user.id).tables.where('tables.closed = false').order( name: :asc)
+      @tables = Institution.find_by_fiscal_id(current_user.id).tables.where('tables.closed = false').order( number: :asc)
       @parties = PoliticalParty.all
       @form = 'form'
     else
@@ -142,8 +144,8 @@ class VotesController < ApplicationController
         end
       end
       respond_to do |format|
-        format.json { render json: { status: 'success', msg: 'Votos registrados', url: votes_path }, status: :created }
         format.html { redirect_to votes_url, notice: "Vote was successfully created." }
+        format.json { render json: { status: 'success', msg: 'Votos registrados', url: votes_path }, status: :created }
       end
     elsif Current.user.fiscal_gral?
       ActiveRecord::Base.transaction do 
@@ -169,7 +171,7 @@ class VotesController < ApplicationController
         table.update(closed: true)
       end
       respond_to do |format|
-        format.json { render json: { status: 'success', msg: 'Votos registrados' }, status: :created }
+        format.json { render json: { status: 'success', msg: 'Votos registrados', url: votes_path }, status: :created }
         format.html { redirect_to votes_url, notice: "Vote was successfully created." }
       end
     end

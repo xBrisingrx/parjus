@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_13_001134) do
+ActiveRecord::Schema.define(version: 2023_07_25_223106) do
 
   create_table "activity_histories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci", force: :cascade do |t|
     t.string "record_type"
@@ -128,6 +128,7 @@ ActiveRecord::Schema.define(version: 2023_07_13_001134) do
     t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "list"
   end
 
   create_table "politician_rols", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci", force: :cascade do |t|
@@ -157,7 +158,6 @@ ActiveRecord::Schema.define(version: 2023_07_13_001134) do
   end
 
   create_table "tables", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci", force: :cascade do |t|
-    t.string "name", null: false
     t.integer "number", null: false
     t.integer "vouters"
     t.boolean "active", default: true

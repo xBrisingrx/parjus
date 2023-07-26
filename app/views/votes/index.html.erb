@@ -72,7 +72,7 @@
             <td rowspan="<%= @count_political_parties %>"> 
               <%= link_to "#{institution.tables_closed} de #{institution.tables.actives.count}", by_institution_tables_path(institution_id: institution.id), remote: true %> 
             </td>
-            <td rowspan="<%= @count_political_parties %>"> <%= institution.fiscal.name %> </td>
+            <td rowspan="<%= @count_political_parties %>"> <%= institution.fiscal&.name %> </td>
             <td><%= @political_parties.first.name %></td>
             <% @politician_rols.each do |rol| %>
               <td> <%= institution.count_votes( @political_parties.first.id, rol.id ) %></td>

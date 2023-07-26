@@ -6,13 +6,64 @@ $('.select-neighborhood-institution').select2({
 $('.select-institution-type').select2({ 
   width: '100%',theme: "bootstrap4", placeholder: "Seleccione tipo institution (*)" })
 
+document.getElementById('form-institution').addEventListener('submit', (e) => {
+  e.preventDefault()
+  e.stopPropagation()
+  let form = new FormData()
+  let tables_start = parseInt(document.getElementById('institution_table_start').value)
+  let tables_end = parseInt(document.getElementById('institution_table_end').value)
+  let tables_index = 1
 
-$("#form-institution").on("ajax:success", function(event) {
-    institutions_table.ajax.reload(null,false)
-    let msg = JSON.parse(event.detail[2].response)
-    noty_alert(msg.status, msg.msg)
-    $("#modal").modal('hide')
-  }).on("ajax:error", function(event) {
-	let msg = JSON.parse( event.detail[2].response )
-	set_input_status_form('form-institution', 'institution', msg)
+  if (!valid_number(tables_start)) {
+    document.getElementById('institution_table_start').classList.add('is-invalid')
+    noty_alert('info', 'Debe ingresar un numero valido')
+    return
+  } else {
+    document.getElementById('institution_table_start').classList.remove('is-invalid')
+  }
+
+  if (!valid_number(tables_end)) {
+    document.getElementById('institution_table_end').classList.add('is-invalid')
+    noty_alert('info', 'Debe ingresar un numero valido')
+    return
+  } else {
+    document.getElementById('institution_table_end').classList.remove('is-invalid')
+  }
+
+  if (tables_start > tables_end) {
+    document.getElementById('institution_table_start').classList.add('is-invalid')
+    document.getElementById('institution_table_end').classList.add('is-invalid')
+    noty_alert('info', 'El inicio de mesa no puede ser mayor al numero final de mesa')
+    return
+  }
+
+  form.append( `institution[name]`, document.querySelector('#institution_name').value )
+  form.append( `institution[direction]`, document.querySelector('#institution_direction').value )
+  form.append( `institution[institution_type_id]`, document.querySelector('#institution_institution_type_id').value )
+  form.append( `institution[neighborhood_id]`, document.querySelector('#institution_neighborhood_id').value )
+  form.append( `institution[fiscal_id]`, document.querySelector('#institution_fiscal_id').value )
+
+  for (let i = tables_start; i <= tables_end; i++) {
+    form.append( `institution[tables_attributes][${tables_index}][number]`, i )
+    tables_index++
+  }
+
+  fetch('/institutions/', {
+      method: 'POST',
+      headers: {           
+        'X-CSRF-Token': document.getElementsByName('csrf-token')[0].content,
+      },
+      body: form
+    })
+    .then( response => response.json() )
+    .then( response => {
+      if (response.status === 'success') {
+        noty_alert(response.status, response.msg)
+        institutions_table.ajax.reload(null,false)
+        $("#modal").modal('hide')
+      } else{
+        console.log('errors')
+      }
+    } )
+    .catch( error => noty_alert('error', 'Ocurrio un error') )
 })

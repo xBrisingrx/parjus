@@ -2,7 +2,7 @@
 <div class="form-group  row">
       <%= form.label :table_id, 'Mesa (*)', class:'col-sm-4 col-md-2 col-form-label g-mb-10' %>
       <div class="col-sm-8 col-lg-6">
-        <%= form.select(:table_id, @tables.collect {|table| [table.name, table.id]}, { include_blank: true},
+        <%= form.select(:table_id, @tables.collect {|table| [table.number, table.id]}, { include_blank: true},
                         class: 'form-control select-table', required: true) %>
         <small class="form-control-feedback text-danger vote_table"></small>
       </div>
@@ -13,12 +13,18 @@
       <%= form.hidden_field :political_party_id, value: party.id %>
       <div class="form-group row g-mb-10">
         <% @politician_roles.each_with_index do |rol, index | %>
-          <div class="col-sm-6 col-md-4 mt-2 votes_rol_<%= party.id%> rol_<%= rol.id%>">
-            <%= form.text_field :number, class: "form-control u-form-control", placeholder: "#{rol.name} #{party.name}", onchange: "votes.count_votes(#{rol.id})" %>
-            <%= form.hidden_field :politician_rol_id, value: rol.id %>
-            <%= form.hidden_field :category, value: :normal %>
-            <small class="form-control-feedback text-danger person_name"></small>
-          </div>
+          <% if party.has_rol( rol.id ) %>
+            <div class="col-sm-6 col-md-4 mt-2 votes_rol_<%= party.id%> rol_<%= rol.id%>">
+              <%= form.text_field :number, class: "form-control u-form-control", placeholder: "#{rol.name} #{party.name}", onchange: "votes.count_votes(#{rol.id})" %>
+              <%= form.hidden_field :politician_rol_id, value: rol.id %>
+              <%= form.hidden_field :category, value: :normal %>
+              <small class="form-control-feedback text-danger person_name"></small>
+            </div>
+          <% else %>
+            <div class="col-sm-6 col-md-4 mt-2">
+              <input type="text" disabled placeholder="Bloqueado <%= rol.name %>" class="form-control u-form-control is-invalid">
+            </div>
+          <% end %>
         <% end %>
       </div>
     </div>
@@ -44,7 +50,7 @@
     <span class="u-label g-bg-<%= other[:color] %> g-rounded-3 g-mr-10 g-mb-5 g-mt-15"><%= other[:title] %>:</span>
     <div class="form-group row g-mb-10">
       <% @politician_roles.each do |rol | %>
-        <div class="col-sm-6 col-md-4 mt-2 other_votes_rol_<%= rol.id%>">
+        <div class="col-sm-6 col-md-4 mt-2 other_votes_rol_<%= rol.id%> votes_value">
           <%= form.text_field :number, class: "form-control u-form-control", placeholder: rol.name, onchange: "votes.count_votes(#{rol.id})" %>
           <%= form.hidden_field :politician_rol_id, value: rol.id %>
           <%= form.hidden_field :category, value: other[:type] %>

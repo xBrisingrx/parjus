@@ -19,7 +19,7 @@
       <% @politician_roles.each do |rol | %>
         <div class="col-sm-6 col-md-4 mt-2">
           <%= label :rol_name, rol.name %>
-          <input type="text" disabled value="<%= Vote.where( table_id: @table.id, politician_rol_id: rol.id ).sum(:number) %>",
+          <input type="text" disabled value="<%= Vote.where( table_id: @table.id, politician_rol_id: rol.id, category: :normal ).sum(:number) %>",
             class='form-control u-form-control'>
         </div>
       <% end %>
@@ -47,7 +47,7 @@
       <% @politician_roles.each do |rol | %>
         <div class="col-sm-6 col-md-4 mt-2">
           <%= label :rol_name, rol.name %>
-          <input type="text" disabled value="",
+          <input type="text" disabled value="<%= Vote.where( table_id: @table.id, politician_rol_id: rol.id ).sum(:number) %>",
             class='form-control u-form-control'>
         </div>
       <% end %>

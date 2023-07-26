@@ -4,9 +4,7 @@ $(document).ready(function(){
 	tables_table = $("#tables_table").DataTable({
     'ajax': 'tables?institution_id=<%= params[:institution_id]%>',
     'columns': [
-    {'data': 'name'},
-    {'data': 'vouters'},
-    {'data': 'actions'}
+    {'data': 'number'}
     ],
     'language': {'url': datatables_lang}
 	})

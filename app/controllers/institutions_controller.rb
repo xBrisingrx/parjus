@@ -21,7 +21,6 @@ class InstitutionsController < ApplicationController
 
   def create
     @institution = Institution.new(institution_params)
-
     respond_to do |format|
       if @institution.save
         format.json { render json: { status: 'success', msg: 'Institución creada' }, status: :created}
@@ -66,6 +65,7 @@ class InstitutionsController < ApplicationController
 
     def institution_params
       params.require(:institution).permit(:name, :description, :d_type, :active, 
-        :direction, :institution_type_id, :neighborhood_id, :fiscal_id)
+        :direction, :institution_type_id, :neighborhood_id, :fiscal_id,
+        tables_attributes: [:id, :number])
     end
 end

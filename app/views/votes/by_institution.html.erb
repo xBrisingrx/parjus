@@ -1,6 +1,7 @@
+<p>Total de mesas: <%= @total_tables %></p>
+<p>Cerradas: <%= @closed_tables %></p>
 <%= link_to "<i class='fa fa-plus'></i> Registrar voto".html_safe, new_vote_path(),
           class: 'btn u-btn-outline-cyan u-btn-hover-v1-2 mb-2 mr-4' %>
-
 <div class="card g-brd-primary rounded g-mb-30">
   <h3 class="card-header g-bg-primary g-brd-transparent g-color-white g-font-size-16 mb-2 rounded-0">
     <i class="fa fa-book"></i>
@@ -19,7 +20,7 @@
       <tbody>
         <% @tables.each do |table|%>
           <tr>
-            <td> Mesa <%= table.name %> </td>
+            <td> Mesa <%= table.number %> </td>
             <td><%= @political_parties.first.name %></td>
             <% @politician_rols.each do |rol| %>
               <td> <%= table.count_votes( @political_parties.first.id, rol.id ) %></td>
@@ -29,7 +30,7 @@
           <% @political_parties.each do |party| %>
             <% next if party.id == @political_parties.first.id %>
             <tr>
-              <td> Mesa <%= table.name %> </td>
+              <td> Mesa <%= table.number %> </td>
               <td> <%= party.name %> </td>
               <% @politician_rols.each do |rol| %>
                 <td><%= table.count_votes( party.id, rol.id ) %></td>

@@ -23,14 +23,14 @@ class NeighborhoodsController < ApplicationController
   # POST /neighborhoods or /neighborhoods.json
   def create
     @neighborhood = Neighborhood.new(neighborhood_params)
-
+    @neighborhood.city_id = 1
     respond_to do |format|
       if @neighborhood.save
-        format.html { redirect_to neighborhood_url(@neighborhood), notice: "Neighborhood was successfully created." }
-        format.json { render :show, status: :created, location: @neighborhood }
+        format.json { render json: {status: 'success', msg: 'Barrio registrado'}, status: :created }
       else
-        format.html { render :new, status: :unprocessable_entity }
+        byebug
         format.json { render json: @neighborhood.errors, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_entity }
       end
     end
   end

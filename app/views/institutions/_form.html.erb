@@ -25,22 +25,34 @@
     </div>
   </div>
 
+  <div class="form-group row g-mb-10">
+    <%= form.label :direction, 'Domicilio:', class: "col-sm-4 col-md-2 col-form-label g-mb-10" %><br>
+    <div class="col-sm-6 col-md-4">
+      <%= form.text_field :direction, class: "form-control u-form-control", placeholder: 'Domicilio particular'  %>
+      <small class="form-control-feedback text-danger person_direction"></small>
+    </div>
+  </div>
+
+  <div class="form-group row g-mb-10">
+    <%= form.label :tables, 'Mesas:', class: "col-sm-4 col-md-2 col-form-label g-mb-10" %><br>
+    <div class="col-sm-2 col-md-4">
+      <%= form.text_field :table_start, class: "form-control u-form-control", placeholder: 'Desde', required: true  %>
+      <small class="form-control-feedback text-danger institution_table_start"></small>
+    </div>
+    <div class="col-sm-2 col-md-4">
+      <%= form.text_field :table_end, class: "form-control u-form-control", placeholder: 'Hasta', required: true  %>
+      <small class="form-control-feedback text-danger institution_table_end"></small>
+    </div>
+  </div>
+
   <div class="form-group row">
     <div class="col-4 col-sm-4 col-md-4 col-lg-2">
       <%= form.label :fiscal_id, 'A cargo de:', class:' col-form-label g-mb-10' %>
     </div>
     <div class="col-6 col-sm-6 col-md-6 col-lg-6">
       <%= form.select(:fiscal_id, @fiscals.collect {|u| [u.name, u.id]}, { include_blank: true},
-                      class: 'form-control select-fiscal', required: true) %>
+                      class: 'form-control select-fiscal') %>
       <small class="form-control-feedback text-danger table_fiscal_id"></small>
-    </div>
-  </div>
-
-  <div class="form-group row g-mb-10">
-    <%= form.label :direction, 'Domicilio:', class: "col-sm-4 col-md-2 col-form-label g-mb-10" %><br>
-    <div class="col-sm-6 col-md-4">
-      <%= form.text_field :direction, class: "form-control u-form-control", placeholder: 'Domicilio particular'  %>
-      <small class="form-control-feedback text-danger person_direction"></small>
     </div>
   </div>
 

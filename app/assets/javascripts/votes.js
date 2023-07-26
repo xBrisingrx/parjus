@@ -145,8 +145,7 @@ window.onload = (event) => {
       .then( response => {
         if (response.status === 'success') {
           noty_alert(response.status, response.msg)
-          location.reload()
-          document.getElementById(response.url)
+          window.location.href = response.url
         }
       })
     })

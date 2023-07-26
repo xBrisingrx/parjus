@@ -31,6 +31,8 @@ class Institution < ApplicationRecord
   has_one :city, through: :neighborhood
   has_many :tables
 
+  accepts_nested_attributes_for :tables
+
   belongs_to :fiscal, class_name: 'User', optional: true
 
   validates :name, presence: true, 
