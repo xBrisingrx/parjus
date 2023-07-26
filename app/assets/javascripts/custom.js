@@ -114,3 +114,18 @@ function hide_table( table_id ) {
 function close_modal( modal_id) {
   $(`#${modal_id}`).modal('hide')
 }
+
+
+function addClassValid( input ) {
+  input.classList.remove('is-invalid')
+  input.classList.add('is-valid')
+}
+
+function addClassInvalid( input ) {
+  input.classList.remove('is-valid')
+  input.classList.add('is-invalid')
+}
+
+function valid_number( value ) {
+  return ( !isNaN( value ) && value > 0 )
+}
