@@ -10,6 +10,7 @@
   <%= link_to "<i class='fa fa-users'></i> Tipos de instituciones".html_safe, institution_types_path(), 
         remote: true,
         class: 'btn u-btn-outline-pink u-btn-hover-v1-2 mb-2 ml-4' %>
+  <%= link_to "<i class='fa fa-users'></i> Lista".html_safe, list_fiscal_institutions_path(format: :xlsx ), class: 'btn u-btn-outline-pink u-btn-hover-v1-2 mb-2 ml-2'%>
 </div>
 
 <%= render( partial: 'shared/table', 

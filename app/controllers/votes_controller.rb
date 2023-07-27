@@ -82,15 +82,17 @@ class VotesController < ApplicationController
   end
 
   def grafic_data
-    @politician_rols = PoliticianRol.actives
+    # @politician_rols = PoliticianRol.actives
     rol_id = params[:rol_id]
     @political_parties = PoliticalParty.actives
     @chart_data = []
     @chart_cols = []
     # @politician_rols.each do |rol|
       @political_parties.each do |party|
-        @chart_cols << "#{party.name}"
-        @chart_data << Vote.by_party( party.id, rol_id )
+        if party.has_rol(rol_id)
+          @chart_cols << "#{party.name}"
+          @chart_data << Vote.by_party( party.id, rol_id )
+        end
       end
     # end
     render json: { 'chart_cols': @chart_cols, 'chart_data': @chart_data }

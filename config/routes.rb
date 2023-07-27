@@ -17,7 +17,9 @@ Rails.application.routes.draw do
   resources :tables do 
     get 'by_institution', on: :collection
   end
-  resources :institutions
+  resources :institutions do 
+    get 'list_fiscal', on: :collection
+  end
   resources :institution_types
 
   resources :neighborhoods do 

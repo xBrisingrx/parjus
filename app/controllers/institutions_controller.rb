@@ -53,6 +53,15 @@ class InstitutionsController < ApplicationController
     end
   end
 
+  def list_fiscal
+    @institutions = Institution.actives 
+    respond_to do |format|
+      format.xlsx {
+        response.headers['Content-Disposition'] = 'attachment; filename="listado.xlsx"'
+      }
+    end
+  end
+
   private
     def set_institution
       @institution = Institution.find(params[:id])

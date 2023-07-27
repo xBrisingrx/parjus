@@ -48,7 +48,10 @@ class User < ApplicationRecord
     fiscal: 3
 
   }
-
+  def show_pass
+    BCrypt.decrypt(self.password)
+  end
+  
   def rol_name
     rol_name = "Admin" if self.rol == 'admin'
     rol_name = "Fiscal gral" if self.rol == 'fiscal_gral'

@@ -12,9 +12,9 @@
 
 
 
-<div id="nav-1-1-primary-hor-center" class="tab-content">
+<div class="row">
   <% @politician_rols.each do |rol| %>
-    <div class="tab-pane fade" id="rol_<%= rol.id %>" role="tabpanel">
+    <div class="col-12 col-sm-6">
       <canvas id="grafic_rol_<%= rol.id %>" width="400" height="150" aria-label="Hello ARIA World" role="img" > <!-- grafico de barras --> </canvas>
     </div>
   <% end %>
@@ -103,12 +103,22 @@
   let chart_cols = [];
   let chart_data = [];
   
+
   async function get_data(rol_id, rol_name) {
     let result = await fetch(`/votes/grafic_data?rol_id=${rol_id}`)
     let data = await result.json()
     chart_cols = data.chart_cols;
     chart_data = data.chart_data;
     const div_content = document.getElementById(`grafic_rol_${rol_id}`);
+    let dataset = [];
+
+    for (let i = 0; i < data.chart_data.length; i++) {
+      let cosito = { label: `# ${rol_name}`, data: data.chart_data[i], borderWidth: 1, borderColor: '#36A2EB', backgroundColor: '#9BD0F5' }
+      dataset.push(cosito)
+    }
+
+    console.log( dataset )
+
     new Chart(div_content, {
     type: 'bar',
     data: {
@@ -134,6 +144,4 @@
   <% @politician_rols.each do |rol| %>
     get_data(<%= rol.id %> , "<%= rol.name %>")
   <%end%>
-  
-  
 </script>

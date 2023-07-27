@@ -28,7 +28,7 @@
 //= require political_parties
 //= require votes
 //= require neighborhoods
-//= require Chart.min
+// require Chart.min
 
 let politician_rols_table, institution_types_table, tables_table
 
