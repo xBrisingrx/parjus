@@ -56,7 +56,7 @@
     Listado de votos por institucion
   </h3>
    <div class="px-2  pb-2">
-    <table id="votes_tablew" class="table table-sm table-hover dt-responsive w-100 u-table--v1" data-show='show'>
+    <table id="votes_table" class="table table-sm table-hover dt-responsive w-100 u-table--v1" data-show='show' data-page-length='12'>
       <thead>
         <tr>
           <% @cols.each do |name| %>
@@ -68,11 +68,11 @@
       <tbody>
         <% @institutions.each do |institution| %>
           <tr>
-            <td rowspan="<%= @count_political_parties %>"> <%= institution.name %> </td>
-            <td rowspan="<%= @count_political_parties %>"> 
-              <%= link_to "#{institution.tables_closed} de #{institution.tables.actives.count}", by_institution_tables_path(institution_id: institution.id), remote: true %> 
+            <td> <%= institution.name %> </td>
+            <td> 
+              <%= link_to "#{institution.tables_closed} de #{institution.tables.actives.count}", by_institution_tables_path(institution_id: institution.id), remote: true %>
             </td>
-            <td rowspan="<%= @count_political_parties %>"> <%= institution.fiscal&.name %> </td>
+            <td> <%= institution.fiscal&.name %> </td>
             <td><%= @political_parties.first.name %></td>
             <% @politician_rols.each do |rol| %>
               <td> <%= institution.count_votes( @political_parties.first.id, rol.id ) %></td>
@@ -81,6 +81,9 @@
             <% @political_parties.each do |party| %>
               <% next if party.id == @political_parties.first.id %>
               <tr>
+                <td></td>
+                <td></td>
+                <td></td>
                 <td> <%= party.name %> </td>
                 <% @politician_rols.each do |rol| %>
                   <td><%= institution.count_votes( party.id, rol.id ) %></td>

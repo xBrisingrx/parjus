@@ -41,7 +41,11 @@ let votes = {
 }
 
 $(document).ready(function(){
-  votes_table = $("#votes_table").DataTable({'language': {'url': datatables_lang}})
+  votes_table = $("#votes_table").DataTable({
+    ordering:  false,
+    'language': {'url': datatables_lang}
+    }
+  )
 })
 
 function create_vote_table(){
