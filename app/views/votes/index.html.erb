@@ -1,18 +1,8 @@
 <h1>Registro de votos <%= @title %></h1>
 
 <h3>Mesas escrutadas: <%= @porcent_tables_closed %>%</h3>
-<ul class="nav justify-content-center u-nav-v1-1 u-nav-primary u-nav-rounded-3 g-mb-20" role="tablist" 
-    data-target="nav-1-1-primary-hor-center" data-tabs-mobile-type="slide-up-down" data-btn-classes="btn btn-md btn-block u-btn-outline-primary g-mb-20">
-  <% @politician_rols.each do |rol| %>
-    <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#rol_<%= rol.id %>" role="tab"><%= rol.name %></a>
-    </li>
-  <% end %>
-</ul>
 
-
-
-<div class="row">
+<div id="graphics" class="row">
   <% @politician_rols.each do |rol| %>
     <div class="col-12 col-sm-6">
       <canvas id="grafic_rol_<%= rol.id %>" width="400" height="150" aria-label="Hello ARIA World" role="img" > <!-- grafico de barras --> </canvas>
@@ -102,7 +92,7 @@
   const ctx = document.getElementById('bar_grafics');
   let chart_cols = [];
   let chart_data = [];
-  let colors = [
+  const colors = [
     { backgroundColor: '#FF6384', borderColor: '#FFB1C1' },
     { backgroundColor: '#36a2eb', borderColor: '#36a2eb' },
     { backgroundColor: '#4bc0c0', borderColor: '#4bc0c0' },
@@ -110,7 +100,12 @@
     { backgroundColor: '#ffcd56', borderColor: '#ffcd56' },
     { backgroundColor: '#ff9f40', borderColor: '#ff9f40' }
   ]
-  let color_index = 0
+  
+  let graphics = document.getElementById('graphics')
+
+  draw_graphics()
+
+  setInterval(draw_graphics, 30000);
 
   async function get_data(rol_id, rol_name, colors) {
     let result = await fetch(`/votes/grafic_data?rol_id=${rol_id}`)
@@ -146,9 +141,23 @@
     }
   });
   }
-  
-  <% @politician_rols.each do |rol| %>
-    get_data(<%= rol.id %> , "<%= rol.name %>", colors[color_index])
-    color_index++
-  <%end%>
+
+  function draw_graphics(){
+    console.log('dibujando')
+    graphics.innerHTML = ''
+    let color_index = 0
+    <% @politician_rols.each do |rol| %>
+      graphics.innerHTML += `
+        <div class="col-12 col-sm-6">
+          <canvas id="grafic_rol_<%= rol.id %>" width="400" height="150" aria-label="grafico de barras" role="img" ></canvas>
+        </div>
+      `
+    <% end %>
+
+    <% @politician_rols.each do |rol| %>
+      get_data(<%= rol.id %> , "<%= rol.name %>", colors[color_index])
+      color_index++
+    <%end%>
+  }
+
 </script>
