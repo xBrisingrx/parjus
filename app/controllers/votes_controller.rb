@@ -110,7 +110,7 @@ class VotesController < ApplicationController
 
     @other_votes = Array.new 
     @other_votes << { type: :nulo, title: 'Votos nulos', color: 'blue' }
-    @other_votes << { type: :recorrido, title: 'Votos recorridos', color: 'indigo' }
+    @other_votes << { type: :recorrido, title: 'Votos recurridos', color: 'indigo' }
     @other_votes << { type: :blanco, title: 'Votos en blanco', color: 'pink' }
 
     if current_user.fiscal_gral?
