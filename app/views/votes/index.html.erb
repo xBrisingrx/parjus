@@ -102,9 +102,17 @@
   const ctx = document.getElementById('bar_grafics');
   let chart_cols = [];
   let chart_data = [];
-  
+  let colors = [
+    { backgroundColor: '#FF6384', borderColor: '#FFB1C1' },
+    { backgroundColor: '#36a2eb', borderColor: '#36a2eb' },
+    { backgroundColor: '#4bc0c0', borderColor: '#4bc0c0' },
+    { backgroundColor: '#9966ff', borderColor: '#9966ff' },
+    { backgroundColor: '#ffcd56', borderColor: '#ffcd56' },
+    { backgroundColor: '#ff9f40', borderColor: '#ff9f40' }
+  ]
+  let color_index = 0
 
-  async function get_data(rol_id, rol_name) {
+  async function get_data(rol_id, rol_name, colors) {
     let result = await fetch(`/votes/grafic_data?rol_id=${rol_id}`)
     let data = await result.json()
     chart_cols = data.chart_cols;
@@ -117,8 +125,6 @@
       dataset.push(cosito)
     }
 
-    console.log( dataset )
-
     new Chart(div_content, {
     type: 'bar',
     data: {
@@ -127,8 +133,8 @@
         label: `# ${rol_name}`,
         data: data.chart_data,
         borderWidth: 1,
-        backgroundColor: 'rgba(54, 162, 235, 0.2)', // Color de fondo
-        borderColor: 'rgba(54, 162, 235, 1)', // Color del borde
+        backgroundColor: colors.backgroundColor, // Color de fondo
+        borderColor: colors.borderColor, // Color del borde
       }]
     },
     options: {
@@ -142,6 +148,7 @@
   }
   
   <% @politician_rols.each do |rol| %>
-    get_data(<%= rol.id %> , "<%= rol.name %>")
+    get_data(<%= rol.id %> , "<%= rol.name %>", colors[color_index])
+    color_index++
   <%end%>
 </script>
