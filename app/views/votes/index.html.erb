@@ -1,6 +1,16 @@
 <h1>Registro de votos <%= @title %></h1>
 
-<h3>Mesas escrutadas: <%= @porcent_tables_closed %>%</h3>
+<div class="row">
+  <div class="col-4">
+    <h3>Mesas escrutadas: <%= @porcent_tables_closed %>%</h3>
+  </div>
+  <div class="col-4">
+    <h3>Cerradas: <%= "#{@tables_closed} de #{@total_tables}" %></h3>
+  </div>
+  <div class="col-4">
+    <h3>Faltan cerrar: <%= @tables_no_closed %></h3>
+  </div>
+</div>
 
 <div id="graphics" class="row">
   <% @politician_rols.each do |rol| %>

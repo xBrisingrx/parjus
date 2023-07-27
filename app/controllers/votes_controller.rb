@@ -18,6 +18,9 @@ class VotesController < ApplicationController
       end
       @institutions = Institution.actives
       @porcent_tables_closed = Table.porcent_tables_closed
+      @total_tables = Table.actives.count
+      @tables_closed = Table.where(closed: true).actives.count
+      @tables_no_closed = Table.where(closed: false).actives.count
     end
   end
 
