@@ -1,17 +1,17 @@
 <%= form_with(model: @table, id: 'form-table') do |form| %>
 <%= form.hidden_field :institution_id, value: @institution_id %>
  <div class="form-group row">
-    <%= form.label :name, 'Nombre: ', class: 'col-form-label col-sm-3 col-md-4' %>
+    <%= form.label :number, 'Nombre: ', class: 'col-form-label col-sm-3 col-md-4' %>
     <div class="col-sm-9 col-md-6">
-      <%= form.text_field :name, class: 'form-control', required:true %>
-      <small class="invalid-feedback table_name"></small>
+      <%= form.text_field :number, class: 'form-control', required:true %>
+      <small class="invalid-feedback table_number"></small>
     </div>
   </div>
 
   <div class="form-group row">
     <%= form.label :vouters, 'N° votantes: ', class: 'col-form-label col-sm-3 col-md-4' %>
     <div class="col-sm-9 col-md-6">
-      <%= form.number_field :vouters, class: 'form-control', required:true %>
+      <%= form.number_field :vouters, class: 'form-control'%>
       <small class="invalid-feedback table_name"></small>
     </div>
   </div>

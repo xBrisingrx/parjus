@@ -5,15 +5,16 @@ $('.select-political-parties').select2({ width: '100%',theme: "bootstrap4", plac
 $("#modal").modal('show')
 
 
-// $("#form-table").on("ajax:success", function(event) {
-//     tables_table.ajax.reload(null,false)
-//     let msg = JSON.parse(event.detail[2].response)
-//     noty_alert(msg.status, msg.msg)
-//     $("#modal").modal('hide')
-//   }).on("ajax:error", function(event) {
-// 	let msg = JSON.parse( event.detail[2].response )
-// 	set_input_status_form('form-table', 'table', msg)
-// })
+$("#form-table").on("ajax:success", function(event) {
+    tables_table.ajax.reload(null,false)
+    let msg = JSON.parse(event.detail[2].response)
+    noty_alert(msg.status, msg.msg)
+    $("#modal").modal('hide')
+  }).on("ajax:error", function(event) {
+ let msg = JSON.parse( event.detail[2].response )
+ set_input_status_form('form-table', 'table', msg)
+})
+  
 count_political_parties = 0
 // document.getElementById('add_political_party').addEventListener('click', e => {
 //   e.preventDefault()
@@ -42,38 +43,38 @@ function remove_political_party(id) {
   }
 }
 
-document.getElementById('form-table').addEventListener('submit', e => {
-  e.preventDefault()
-  e.stopPropagation()
-  let form = new FormData()
-  form.append('table[name]', e.target.querySelector('#table_name').value )
-  // form.append('table[fiscal_id]', e.target.querySelector('#table_fiscal_id').value )
-  form.append('table[institution_id]', e.target.querySelector('#table_institution_id').value )
-  form.append('table[vouters]', e.target.querySelector('#table_vouters').value )
+// document.getElementById('form-table').addEventListener('submit', e => {
+//   e.preventDefault()
+//   e.stopPropagation()
+//   let form = new FormData()
+//   form.append('table[number]', e.target.querySelector('#table_number').value )
+//   // form.append('table[fiscal_id]', e.target.querySelector('#table_fiscal_id').value )
+//   form.append('table[institution_id]', e.target.querySelector('#table_institution_id').value )
+//   form.append('table[vouters]', e.target.querySelector('#table_vouters').value )
 
-  // const parties = document.getElementsByClassName('political_party_to_add')
-  // let parties_index = 1
-  // for (let party of parties) {
-  //   form.append( `table[tables_political_parties_attributes][${parties_index}][political_party_id]`, party.querySelector('#td_political_party').dataset.value )
-  //   parties_index++
-  // }
+//   // const parties = document.getElementsByClassName('political_party_to_add')
+//   // let parties_index = 1
+//   // for (let party of parties) {
+//   //   form.append( `table[tables_political_parties_attributes][${parties_index}][political_party_id]`, party.querySelector('#td_political_party').dataset.value )
+//   //   parties_index++
+//   // }
 
-  fetch('<%= tables_path() %>', {
-    method: 'POST',
-    headers: {           
-        'X-CSRF-Token': document.getElementsByName('csrf-token')[0].content,
-      },
-      body: form
-  })
-  .then( response => response.json() )
-  .then( response => {
-    if (response.status === 'success') {
-      noty_alert(response.status, response.msg)
-      tables_table.ajax.reload(null,false)
-      $("#modal").modal('hide')
-    } else {
-      // let msg = JSON.parse( event.detail[2].response )
-      set_input_status_form('form-table', 'table', response.msg)
-    }
-  })
-})
+//   fetch('<%= tables_path() %>', {
+//     method: 'POST',
+//     headers: {           
+//         'X-CSRF-Token': document.getElementsByName('csrf-token')[0].content,
+//       },
+//       body: form
+//   })
+//   .then( response => response.json() )
+//   .then( response => {
+//     if (response.status === 'success') {
+//       noty_alert(response.status, response.msg)
+//       tables_table.ajax.reload(null,false)
+//       $("#modal").modal('hide')
+//     } else {
+//       // let msg = JSON.parse( event.detail[2].response )
+//       set_input_status_form('form-table', 'table', response.msg)
+//     }
+//   })
+// })

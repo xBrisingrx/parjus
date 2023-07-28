@@ -4,7 +4,7 @@ json.data @institutions do |institution|
 	json.city institution.city.name
 	json.neighborhood institution.neighborhood.name
 	json.direction institution.direction
-	json.tables institution.tables.count
+	json.tables "#{institution.tables&.count} ( #{institution.tables&.order(:number)&.first&.number} - #{institution.tables&.order(:number)&.last&.number} )"
 	json.fiscal ( institution.fiscal.nil? ) ? '' : institution.fiscal.name
 	json.actions "#{ link_to '<i class="fa fa-edit"></i>'.html_safe, edit_institution_path(institution), 
 										remote: :true, 

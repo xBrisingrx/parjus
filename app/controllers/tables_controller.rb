@@ -36,7 +36,6 @@ class TablesController < ApplicationController
   # POST /tables or /tables.json
   def create
     @table = Table.new(table_params)
-    @table.number = 0
     respond_to do |format|
       if @table.save
         format.json { render json: { status: 'success', msg: 'Mesa registrada' }, status: :created }
@@ -68,6 +67,14 @@ class TablesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to tables_url, notice: "Table was successfully destroyed." }
       format.json { head :no_content }
+    end
+  end
+
+  def disable
+    table = Table.find(params[:table_id])
+    table.destroy
+    respond_to do |format|
+      format.json { render json: { status: 'success', msg: 'Mesa eliminada' }, status: :ok }
     end
   end
 

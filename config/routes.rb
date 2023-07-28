@@ -35,6 +35,7 @@ Rails.application.routes.draw do
     get 'import_neighborhood', on: :collection
   end
   post 'disable_person', to: 'people#disable', as: 'disable_person'
+  post 'disable_table', to: 'tables#disable', as: 'disable_table'
 
   namespace :authentication, path: '', as: '' do
     resources :users, only: [:index,:new, :create, :edit, :update]
