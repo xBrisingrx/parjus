@@ -28,6 +28,7 @@ module Parjus
     # the framework and any gems in your application.
 
     # Don't generate system test files.
+    config.exceptions_app = self.routes
     config.time_zone = "America/Argentina/Buenos_Aires"
     config.i18n.default_locale = :es
     config.generators.system_tests = nil
