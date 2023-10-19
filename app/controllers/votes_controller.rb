@@ -118,12 +118,12 @@ class VotesController < ApplicationController
 
     if current_user.fiscal_gral?
       @tables = Institution.find_by_fiscal_id(current_user.id).tables.where('tables.closed = false').order( number: :asc)
-      @parties = PoliticalParty.all
+      @parties = PoliticalParty.all.order(:name)
       @form = 'form'
     else
       # fiscal de mesa
       @table = Table.find_by_fiscal_id(current_user.id)
-      @parties = @table.political_parties
+      @parties = @table.political_parties.order(:name)
       @form = 'form_by_table'
     end
   end
