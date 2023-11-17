@@ -37,15 +37,17 @@ class Table < ApplicationRecord
 
   after_create :add_political_parties
 
-  def self.porcent_tables_closed
-    closeds = Table.where(closed: true).where(active:true).count
+  def self.porcent_tables_closed(votation_id = nil)
+    if votation_id == nil
+      votation_id = Votation.last.id
+    end
+    closeds = Vote.where(votation_id: votation_id).group(:table_id).count.count
     all_tables = Table.where(active:true).count
     porcent = (closeds * 100) / all_tables
     porcent
   end
 
   def count_votes political_party_id, politician_rol_id
-    # votes = self.joins(:votes)
     data = self.votes.select('votes.id, votes.number').where("votes.political_party_id = #{political_party_id}").where("votes.politician_rol_id = #{politician_rol_id}")
     if data.blank?
       return 0 
@@ -56,6 +58,20 @@ class Table < ApplicationRecord
       end
       return sum_votes
     end
+  end
+
+  def is_closed?(votation_id = nil)
+    if votation_id == nil
+      votation_id = Votation.last.id
+    end
+    self.votes.where(votation_id: votation_id).count > 0
+  end
+
+  def self.tables_closed(votation_id = nil)
+    if votation_id == nil
+      votation_id = Votation.last.id
+    end
+    Vote.where(votation_id: votation_id).group(:table_id).count.count
   end
 
   private 

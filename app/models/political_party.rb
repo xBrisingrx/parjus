@@ -9,6 +9,15 @@
 #  name        :string(255)      not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  votation_id :bigint
+#
+# Indexes
+#
+#  index_political_parties_on_votation_id  (votation_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (votation_id => votations.id)
 #
 class PoliticalParty < ApplicationRecord
 	has_many :politicians_parties
@@ -25,6 +34,11 @@ class PoliticalParty < ApplicationRecord
 
 	def has_rol rol_id
 		!self.politicians_parties.where( politician_rol_id: rol_id ).blank?
+	end
+
+	def self.last_votations
+		votation = Votation.last.id
+		self.where(votation_id: votation)
 	end
 
 end

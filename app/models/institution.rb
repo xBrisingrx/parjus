@@ -39,8 +39,12 @@ class Institution < ApplicationRecord
     uniqueness: { case_sensitive: false, message: "Ya existe una institución registrada con este nombre" }
   scope :actives, -> { where(active: true) }
 
-  def tables_closed
-    self.tables.where(closed:true).actives.count
+  def tables_closed(votation_id)
+    count_closed = 0
+    self.tables.each do |table|
+      count_closed+=1 if table.is_closed?(votation_id)
+    end
+    count_closed
   end
 
   def count_votes political_party_id, politician_rol_id

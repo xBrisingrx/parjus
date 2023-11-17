@@ -2,6 +2,9 @@ Rails.application.routes.draw do
   match "/404", via: :all, to: "errors#not_found"
   match "/500", via: :all, to: "errors#internal_server_error"
   get 'institution_votes', to: 'institution_votes#index'
+
+  resources :votations, only: [:index, :create, :new]
+
   resources :votes do 
     get 'mesa', to: 'votes#by_table', on: :collection
     get 'institucion', to: 'votes#by_institution', on: :collection

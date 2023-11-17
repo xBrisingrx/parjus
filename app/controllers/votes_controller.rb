@@ -6,21 +6,23 @@ class VotesController < ApplicationController
     redirect_to institucion_votes_path if Current.user.fiscal_gral?
     redirect_to mesa_votes_path if Current.user.fiscal?
 
+    @votation_id = (params[:votation_id]) ? params[:votation_id] : Votation.last.id
+
     if Current.user.admin?
       @cols = [ 'Institucion', 'Mesas cerradas', 'Referente' ,'Partidos' ]
       @cols_parties = [ 'Partido' ]
-      @politician_rols = PoliticianRol.actives
-      @political_parties = PoliticalParty.actives
+      @politician_rols = PoliticianRol.votations(@votation_id).actives
+      @political_parties = PoliticalParty.where(votation_id: @votation_id).actives
       @count_political_parties = @political_parties.count
       @politician_rols.each do |rol|
         @cols << rol.name 
         @cols_parties << rol.name
       end
       @institutions = Institution.actives
-      @porcent_tables_closed = Table.porcent_tables_closed
+      @porcent_tables_closed = Table.porcent_tables_closed(@votation_id)
       @total_tables = Table.actives.count
-      @tables_closed = Table.where(closed: true).actives.count
-      @tables_no_closed = Table.where(closed: false).actives.count
+      @tables_closed = Table.tables_closed(@votation_id)
+      @tables_no_closed = @total_tables - @tables_closed
     end
   end
 
@@ -87,7 +89,7 @@ class VotesController < ApplicationController
   def grafic_data
     # @politician_rols = PoliticianRol.actives
     rol_id = params[:rol_id]
-    @political_parties = PoliticalParty.actives
+    @political_parties = PoliticalParty.where(votation_id: params[:votation_id]).actives
     @chart_data = []
     @chart_cols = []
     # @politician_rols.each do |rol|
@@ -134,6 +136,7 @@ class VotesController < ApplicationController
 
   # POST /votes or /votes.json
   def create
+    votation_id = Votation.last.id
     if Current.user.fiscal?
       ActiveRecord::Base.transaction do 
         for i in 1..params[:cant].to_i do 
@@ -160,16 +163,13 @@ class VotesController < ApplicationController
             politician_rol_id: params[:vote][:politician_rol_id][i.to_s],
             category: params[:vote][:category][i.to_s],
             table_id: params[:vote][:table_id],
+            votation_id: votation_id
           )
 
           if params[:vote][:category][i.to_s] == 'normal'
             vote.political_party_id = params[:vote][:political_party_id][i.to_s]
           end
           vote.save!
-          # Vote.create(table_id: params[:vote][:table_id],
-          #   political_party_id: params[:vote][:political_party_id][i.to_s],
-          #   number: params[:vote][:number][i.to_s],
-          #   politician_rol_id: params[:vote][:politician_rol_id][i.to_s])
         end
 
         table = Table.find(params[:vote][:table_id])

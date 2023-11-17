@@ -70,26 +70,33 @@
           <tr>
             <td> <%= institution.name %> </td>
             <td> 
-              <%= link_to "#{institution.tables_closed} de #{institution.tables.actives.count}", by_institution_tables_path(institution_id: institution.id), remote: true %>
+              <%= link_to "#{institution.tables_closed(@votation_id)} de #{institution.tables.actives.count}", by_institution_tables_path(institution_id: institution.id), remote: true %>
             </td>
-            <td> <%= institution.fiscal&.name %> </td>
-            <td><%= @political_parties.first.name %></td>
-            <% @politician_rols.each do |rol| %>
-              <td> <%= institution.count_votes( @political_parties.first.id, rol.id ) %></td>
+            <% if @political_parties.count > 0 %>
+              <td> <%= institution.fiscal&.name %> </td>
+              <td><%= @political_parties.first.name %></td>
+              <% @politician_rols.each do |rol| %>
+                <td> <%= institution.count_votes( @political_parties.first.id, rol.id ) %></td>
+              <% end %>
+            <% else %>
+              <td></td>
+              <td></td>
             <% end %>
           </tr>
-            <% @political_parties.each do |party| %>
-              <% next if party.id == @political_parties.first.id %>
-              <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td> <%= party.name %> </td>
-                <% @politician_rols.each do |rol| %>
-                  <td><%= institution.count_votes( party.id, rol.id ) %></td>
-                <% end %>
-              </tr>
-            <% end %>
+            <% if @political_parties.count > 0 %>
+              <% @political_parties.each do |party| %>
+                <% next if party.id == @political_parties.first.id %>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td> <%= party.name %> </td>
+                  <% @politician_rols.each do |rol| %>
+                    <td><%= institution.count_votes( party.id, rol.id ) %></td>
+                  <% end %>
+                </tr>
+              <% end %>
+            <%end%>
         <% end %>
       </tbody>
     </table>
@@ -120,8 +127,8 @@
 
   setInterval(draw_graphics, 30000);
 
-  async function get_data(rol_id, rol_name, colors) {
-    let result = await fetch(`/votes/grafic_data?rol_id=${rol_id}`)
+  async function get_data(votation_id, rol_id, rol_name, colors) {
+    let result = await fetch(`/votes/grafic_data?rol_id=${rol_id}&votation_id=${votation_id}`)
     let data = await result.json()
     chart_cols = data.chart_cols;
     chart_data = data.chart_data;
@@ -167,7 +174,7 @@
     <% end %>
 
     <% @politician_rols.each do |rol| %>
-      get_data(<%= rol.id %> , "<%= rol.name %>", colors[color_index])
+      get_data(<%= @votation_id %>,<%= rol.id %> , "<%= rol.name %>", colors[color_index])
       color_index++
     <%end%>
   }

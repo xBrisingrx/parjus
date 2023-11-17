@@ -1,0 +1,30 @@
+<h1>Votaciones</h1>
+<%= link_to "<i class='fa fa-plus'></i> Registrar votacion".html_safe, new_votation_path(), remote: true, class: 'btn u-btn-outline-primary u-btn-hover-v1-2 mb-2' %>
+
+<div class="card g-brd-primary rounded g-mb-30">
+  <h3 class="card-header g-bg-primary g-brd-transparent g-color-white g-font-size-16 mb-2 rounded-0">
+    <i class="fa fa-book"></i>
+    Votaciones registradas
+  </h3>
+   <div class="px-2  pb-2">
+    <table id="votations_table" class="table table-sm table-hover dt-responsive w-100 u-table--v1" data-show='show'>
+      <thead>
+        <tr>
+          <th>Votacion</th>
+          <th>Fecha</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @votations.each do |votation| %>
+        	<tr>
+        		<td><%= votation.name %></td>
+        		<td><%= votation.date %></td>
+        		<td> Acciones </td>
+        	</tr>
+        <%end%>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -5,7 +5,7 @@ class PoliticalPartiesController < ApplicationController
   # manejamos los partidos politicos
 
   def index
-    @political_parties = PoliticalParty.all
+    @political_parties = PoliticalParty.last_votations
   end
 
   # GET /political_parties/1 or /political_parties/1.json
@@ -27,7 +27,7 @@ class PoliticalPartiesController < ApplicationController
   # POST /political_parties or /political_parties.json
   def create
     @political_party = PoliticalParty.new(political_party_params)
-
+    @political_party.votation_id = Votation.last.id
     respond_to do |format|
       if @political_party.save
         format.json { render json: { status:'success', msg: 'Partido registrado' }, status: :created }

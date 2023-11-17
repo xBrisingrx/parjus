@@ -10,18 +10,21 @@
 #  political_party_id :bigint
 #  politician_rol_id  :bigint
 #  table_id           :bigint
+#  votation_id        :bigint
 #
 # Indexes
 #
 #  index_votes_on_political_party_id  (political_party_id)
 #  index_votes_on_politician_rol_id   (politician_rol_id)
 #  index_votes_on_table_id            (table_id)
+#  index_votes_on_votation_id         (votation_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (political_party_id => political_parties.id)
 #  fk_rails_...  (politician_rol_id => politician_rols.id)
 #  fk_rails_...  (table_id => tables.id)
+#  fk_rails_...  (votation_id => votations.id)
 #
 class Vote < ApplicationRecord
   belongs_to :table
