@@ -25,6 +25,9 @@
                   <%= link_to 'Votos', votes_path, class: 'nav-link' %>
                 </li>
                 <% if current_user.admin? %>
+                  <li class="nav-item g-mx-20--lg g-mb-5 g-mb-0--lg"> 
+                    <%= link_to 'Mesas', tables_path, class: 'nav-link' %>
+                  </li>
                   <li class="nav-item hs-has-sub-menu g-mx-20--lg g-mb-5 g-mb-0--lg"> 
                     <%= link_to 'Votaciones', votations_path, class: 'nav-link', id: 'nav-votation', 
                       aria: { haspopup: "true", expanded: 'false', controls: 'nav-submenu-1' } %>

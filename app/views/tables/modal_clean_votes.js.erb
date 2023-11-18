@@ -1,0 +1,10 @@
+$("#modal").html("<%= j (render partial: 'shared/modal', locals:{ size: 'lg', content: 'form_clean_votes' } ) %>")
+$("#modal").modal('show')
+
+$("#form-clean-votes-table").on("ajax:success", function(event) {
+  let msj = JSON.parse(event.detail[2].response)
+  noty_alert(msj.status, msj.msg)
+  window.location.replace("<%= tables_path %>")
+}).on("ajax:error", function(event) {
+  console.log(event)
+})

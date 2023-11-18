@@ -2,7 +2,9 @@
 <div class="form-group  row">
       <%= form.label :table_id, 'Mesa (*)', class:'col-sm-4 col-md-2 col-form-label g-mb-10' %>
       <div class="col-sm-8 col-lg-6">
-        <%= form.select(:table_id, @tables.collect {|table| [table.number, table.id]}, { include_blank: true},
+        <%= form.select(:table_id, @tables.collect {|table| 
+          next if table.is_closed?
+          [table.number, table.id]}, { include_blank: true},
                         class: 'form-control select-table', required: true) %>
         <small class="form-control-feedback text-danger vote_table"></small>
       </div>

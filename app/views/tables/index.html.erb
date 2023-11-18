@@ -1,0 +1,32 @@
+<h1>Mesas registradas</h1>
+
+<div class="card g-brd-blue rounded g-mb-30">
+  <h3 class="card-header g-bg-blue g-brd-transparent g-color-white g-font-size-16 mb-2 rounded-0">
+    <i class="fa fa-book"></i>
+    Mesas
+  </h3>
+   <div class="px-2  pb-2">
+    <table id="tables_table" class="table table-sm table-hover dt-responsive w-100 u-table--v1" data-show='show'>
+      <thead>
+        <tr>
+          <th>Mesa</th>
+          <th>Institución</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @tables.each do |table| %>
+	        <tr>
+	        	<td><%= table.number %></td>
+	        	<td><%= table.institution.name %></td>
+	        	<td> <%= link_to "<i class='fa fa-window-close-o' > </i>".html_safe, modal_clean_votes_table_path(table), 
+	        		remote:true, 
+	        		class: "btn u-btn-red u-btn-sm",
+	        		title: "Limpiar mesa" %> </td>
+	        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

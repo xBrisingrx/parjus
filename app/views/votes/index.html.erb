@@ -139,7 +139,7 @@
       let cosito = { label: `# ${rol_name}`, data: data.chart_data[i], borderWidth: 1, borderColor: '#36A2EB', backgroundColor: '#9BD0F5' }
       dataset.push(cosito)
     }
-
+    // debugger
     new Chart(div_content, {
     type: 'bar',
     data: {
@@ -148,8 +148,8 @@
         label: `# ${rol_name}`,
         data: data.chart_data,
         borderWidth: 1,
-        backgroundColor: colors.backgroundColor, // Color de fondo
-        borderColor: colors.borderColor, // Color del borde
+        backgroundColor: data.colors, // Color de fondo
+        borderColor: data.colors, // Color del borde
       }]
     },
     options: {

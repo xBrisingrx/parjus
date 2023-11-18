@@ -21,6 +21,8 @@ Rails.application.routes.draw do
   resources :dni_types
   resources :tables do 
     get 'by_institution', on: :collection
+    get 'modal_clean_votes', on: :member
+    post 'clean_votes', on: :member
   end
   resources :institutions do 
     get 'list_fiscal', on: :collection

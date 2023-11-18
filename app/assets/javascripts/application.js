@@ -27,6 +27,7 @@
 //= require institutions
 //= require political_parties
 //= require votes
+//= require tables
 //= require neighborhoods
 // require Chart.min
 

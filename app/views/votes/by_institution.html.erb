@@ -25,7 +25,11 @@
             <% @politician_rols.each do |rol| %>
               <td> <%= table.count_votes( @political_parties.first.id, rol.id ) %></td>
             <% end %>
-            <td> <%= link_to 'Votos ingresados', show_by_table_vote_path( table.id ), class: 'btn btn-sm u-btn-primary text-white', remote: true %> </td>
+            <% if table.is_closed? %>
+              <td> <%= link_to 'Votos ingresados', show_by_table_vote_path( table.id ), class: 'btn btn-sm u-btn-blue text-white', remote: true %> </td>
+            <% else %>
+              <td> <%= link_to 'Mesa sin votos', '#', class: 'btn btn-sm u-btn-orange text-white', remote: true %> </td>
+            <% end %>
           </tr>
           <% @political_parties.each do |party| %>
             <% next if party.id == @political_parties.first.id %>

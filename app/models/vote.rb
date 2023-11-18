@@ -30,6 +30,7 @@ class Vote < ApplicationRecord
   belongs_to :table
   belongs_to :political_party, optional: true
   belongs_to :politician_rol
+  belongs_to :votation
 
   validates :number, presence: true, numericality: { only_integer: true }
   validates :category, presence: true

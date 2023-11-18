@@ -4,6 +4,7 @@
 #
 #  id          :bigint           not null, primary key
 #  active      :boolean          default(TRUE)
+#  color       :string(255)      default("#aae0fa")
 #  description :text(65535)
 #  list        :integer
 #  name        :string(255)      not null

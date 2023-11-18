@@ -12,4 +12,5 @@
 class Votation < ApplicationRecord
 	has_many :votes
 	has_many :political_parties
+	default_scope { order(date: :asc) }
 end

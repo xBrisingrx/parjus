@@ -1,6 +1,6 @@
 class VotationsController < ApplicationController
   def index
-    @votations = Votation.all
+    @votations = Votation.all.order(date: :desc)
   end
 
   def new

@@ -5,7 +5,7 @@
         <% @politician_roles.each do |rol | %>
           <div class="col-sm-6 col-md-4 mt-2">
             <%= label :rol_name, rol.name %>
-            <input type="text" disabled value="<%= @table.votes.where( political_party_id: party.id, politician_rol_id: rol.id ).first&.number %>",
+            <input type="text" disabled value="<%= @table.votes.where( votation_id: @votation_id,political_party_id: party.id, politician_rol_id: rol.id ).first&.number %>",
               class='form-control u-form-control'>
           </div>
         <% end %>
@@ -19,7 +19,7 @@
       <% @politician_roles.each do |rol | %>
         <div class="col-sm-6 col-md-4 mt-2">
           <%= label :rol_name, rol.name %>
-          <input type="text" disabled value="<%= Vote.where( table_id: @table.id, politician_rol_id: rol.id, category: :normal ).sum(:number) %>",
+          <input type="text" disabled value="<%= Vote.where( votation_id: @votation_id, table_id: @table.id, politician_rol_id: rol.id, category: :normal ).sum(:number) %>",
             class='form-control u-form-control'>
         </div>
       <% end %>
@@ -33,7 +33,7 @@
           <% @politician_roles.each do |rol | %>
             <div class="col-sm-6 col-md-4 mt-2">
               <%= label :rol_name, rol.name %>
-              <input type="text" disabled value="<%= @table.votes.where( category: category[:value], politician_rol_id: rol.id ).first&.number %>",
+              <input type="text" disabled value="<%= @table.votes.where( votation_id: @votation_id, category: category[:value], politician_rol_id: rol.id ).first&.number %>",
                 class='form-control u-form-control'>
             </div>
           <% end %>
@@ -47,7 +47,7 @@
       <% @politician_roles.each do |rol | %>
         <div class="col-sm-6 col-md-4 mt-2">
           <%= label :rol_name, rol.name %>
-          <input type="text" disabled value="<%= Vote.where( table_id: @table.id, politician_rol_id: rol.id ).sum(:number) %>",
+          <input type="text" disabled value="<%= Vote.where( votation_id: @votation_id, table_id: @table.id, politician_rol_id: rol.id ).sum(:number) %>",
             class='form-control u-form-control'>
         </div>
       <% end %>

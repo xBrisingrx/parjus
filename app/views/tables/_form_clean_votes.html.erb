@@ -1,0 +1,9 @@
+<%= form_with(url: clean_votes_table_path(@table), id: 'form-clean-votes-table') do |form| %>
+	<div>
+		<p>Esta seguro de limpiar esta mesa? Se eliminaran todos los votos registrados.</p>
+	</div>
+  <div class="actions">
+    <%= form.submit 'Eliminar', class: 'btn u-btn-primary mr-2' %>
+    <button type="button" class="btn u-btn-red" data-dismiss="modal">Cerrar</button>
+  </div>
+<% end %>

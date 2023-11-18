@@ -1,5 +1,5 @@
 class TablesController < ApplicationController
-  before_action :set_table, only: %i[ show edit update destroy ]
+  before_action :set_table, only: %i[ show edit update destroy modal_clean_votes clean_votes ]
 
   # GET /tables or /tables.json
   def index
@@ -8,7 +8,7 @@ class TablesController < ApplicationController
       @institution = Institution.find(params[:institution_id])
       @title_modal = "Mesas de la institution #{@institution.name}"
     else
-      @tables = Table.all
+      @tables = Table.all.includes(:institution)
     end
   end
 
@@ -76,6 +76,16 @@ class TablesController < ApplicationController
     respond_to do |format|
       format.json { render json: { status: 'success', msg: 'Mesa eliminada' }, status: :ok }
     end
+  end
+
+  def modal_clean_votes
+    @title_modal = "Limpiar votos de la mesa #{@table.number}"
+  end
+
+  def clean_votes
+    votes = @table.votes.where(votation_id: Votation.last.id)
+    votes.destroy_all
+    render json: { status: :ok, msg: "Votos eliminados" }, status: :ok
   end
 
   private

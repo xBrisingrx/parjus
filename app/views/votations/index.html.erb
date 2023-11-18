@@ -20,8 +20,8 @@
         <% @votations.each do |votation| %>
         	<tr>
         		<td><%= votation.name %></td>
-        		<td><%= votation.date %></td>
-        		<td> Acciones </td>
+        		<td><%= date_format votation.date %></td>
+        		<td> </td>
         	</tr>
         <%end%>
       </tbody>

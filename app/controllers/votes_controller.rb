@@ -1,13 +1,11 @@
 class VotesController < ApplicationController
   before_action :set_vote, only: %i[ show edit update destroy ]
+  before_action :set_votation, only: %i[ index by_institution new create show_by_table by_table ]
 
   # GET /votes or /votes.json
   def index
     redirect_to institucion_votes_path if Current.user.fiscal_gral?
     redirect_to mesa_votes_path if Current.user.fiscal?
-
-    @votation_id = (params[:votation_id]) ? params[:votation_id] : Votation.last.id
-
     if Current.user.admin?
       @cols = [ 'Institucion', 'Mesas cerradas', 'Referente' ,'Partidos' ]
       @cols_parties = [ 'Partido' ]
@@ -29,7 +27,7 @@ class VotesController < ApplicationController
   def by_table # vista de fiscal de mesa
     @table = Table.find_by_fiscal_id(current_user.id)
     @votes = @table.votes
-    @votes = @votes.group(:political_party_id).sum(:number)
+    @votes = @votes.where(votation_id: @votation_id).group(:political_party_id).sum(:number)
     @parties = @table.political_parties.order('political_parties.name')
     @title = "de la mesa #{@table.number}"
     @data = []
@@ -42,9 +40,9 @@ class VotesController < ApplicationController
     @institution = Institution.find_by_fiscal_id(current_user.id)
     @tables = @institution.tables
     @total_tables = @tables.count 
-    @closed_tables = @institution.tables.where(closed: true).count
-    @politician_rols = PoliticianRol.actives
-    @political_parties = PoliticalParty.actives
+    @closed_tables = @institution.tables_closed
+    @politician_rols = PoliticianRol.votations(@votation_id).actives
+    @political_parties = PoliticalParty.where(votation_id: @votation_id).actives
     @count_political_parties = @political_parties.count
     @votos_por_mesa = []
     @tables.each do |table|
@@ -58,7 +56,7 @@ class VotesController < ApplicationController
 
     @cols << 'Acciones'
 
-    @parties = PoliticalParty.all
+    @parties = PoliticalParty.where(votation_id: @votation_id)
     @title = "de la institution #{@institution.name}"
     @data = []
     @tables.each do |table|
@@ -76,8 +74,8 @@ class VotesController < ApplicationController
 
   def show_by_table
     @table = Table.find params[:id]
-    @parties = PoliticalParty.all
-    @politician_roles = PoliticianRol.actives
+    @parties = PoliticalParty.where(votation_id: @votation_id)
+    @politician_roles = PoliticianRol.votations(@votation_id).actives
     @votes_categories = [
       { name: 'Votos nulos:', value: 'nulo' },
       { name: 'Votos recorridos:', value: 'recorrido' },
@@ -92,15 +90,17 @@ class VotesController < ApplicationController
     @political_parties = PoliticalParty.where(votation_id: params[:votation_id]).actives
     @chart_data = []
     @chart_cols = []
+    @colors = []
     # @politician_rols.each do |rol|
       @political_parties.each do |party|
         if party.has_rol(rol_id)
           @chart_cols << "#{party.name}"
           @chart_data << Vote.by_party( party.id, rol_id )
+          @colors << "#{party.color}"
         end
       end
     # end
-    render json: { 'chart_cols': @chart_cols, 'chart_data': @chart_data }
+    render json: { 'chart_cols': @chart_cols, 'chart_data': @chart_data, 'colors': @colors }
   end
 
   # GET /votes/1 or /votes/1.json
@@ -110,7 +110,7 @@ class VotesController < ApplicationController
   # GET /votes/new
   def new
     @title_modal = "Registrar voto"
-    @politician_roles = PoliticianRol.actives
+    @politician_roles = PoliticianRol.votations(@votation_id).actives
     @vote = Vote.new
 
     @other_votes = Array.new 
@@ -119,14 +119,14 @@ class VotesController < ApplicationController
     @other_votes << { type: :blanco, title: 'Votos en blanco', color: 'pink' }
 
     if current_user.fiscal_gral?
-      @tables = Institution.find_by_fiscal_id(current_user.id).tables.where('tables.closed = false').order( number: :asc)
-      @parties = PoliticalParty.all.order(:name)
+      @tables = Institution.find_by_fiscal_id(current_user.id).tables.actives.order( number: :asc)
+      @parties = PoliticalParty.where(votation_id: @votation_id).order(:name)
       @form = 'form'
     else
       # fiscal de mesa
-      @table = Table.find_by_fiscal_id(current_user.id)
-      @parties = @table.political_parties.order(:name)
-      @form = 'form_by_table'
+      # @table = Table.find_by_fiscal_id(current_user.id)
+      # @parties = @table.political_parties.order(:name)
+      # @form = 'form_by_table'
     end
   end
 
@@ -136,7 +136,7 @@ class VotesController < ApplicationController
 
   # POST /votes or /votes.json
   def create
-    votation_id = Votation.last.id
+    votation_id = @votation_id
     if Current.user.fiscal?
       ActiveRecord::Base.transaction do 
         for i in 1..params[:cant].to_i do 
@@ -212,6 +212,10 @@ class VotesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_vote
       @vote = Vote.find(params[:id])
+    end
+
+    def set_votation
+      @votation_id = (params[:votation_id]) ? params[:votation_id] : Votation.last.id
     end
 
     # Only allow a list of trusted parameters through.
