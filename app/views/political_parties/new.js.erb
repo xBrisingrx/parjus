@@ -45,6 +45,7 @@ document.getElementById('form-political-party').addEventListener('submit', e => 
   e.stopPropagation()
   let form = new FormData()
   form.append('political_party[name]', e.target.querySelector('#political_party_name').value )
+  form.append('political_party[color]', e.target.querySelector('#political_party_color').value )
   form.append('political_party[description]', e.target.querySelector('#political_party_description').value )
 
   const politicians = document.getElementsByClassName('politician_to_add')
