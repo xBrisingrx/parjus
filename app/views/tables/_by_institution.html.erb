@@ -23,8 +23,8 @@
 			      <tbody>
 			        <% tables.each do |table|%>
 			        	<tr>
-			        		<td> <%= table.name %> </td>
-			        		<td> <%= (table.closed) ? 'Si' : 'No' %></td>
+			        		<td> <%= table.number %> </td>
+			        		<td> <%= (table.is_closed?) ? 'Si' : 'No' %></td>
 			        	</tr>
 			        <% end %>
 			      </tbody>
