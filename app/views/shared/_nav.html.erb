@@ -28,15 +28,15 @@
                   <li class="nav-item g-mx-20--lg g-mb-5 g-mb-0--lg"> 
                     <%= link_to 'Mesas', tables_path, class: 'nav-link' %>
                   </li>
-                  <li class="nav-item hs-has-sub-menu g-mx-20--lg g-mb-5 g-mb-0--lg"> 
-                    <%= link_to 'Votaciones', votations_path, class: 'nav-link', id: 'nav-votation', 
+<!--                   <li class="nav-item hs-has-sub-menu g-mx-20--lg g-mb-5 g-mb-0--lg"> 
+                    <%# link_to 'Votaciones', votations_path, class: 'nav-link', id: 'nav-votation', 
                       aria: { haspopup: "true", expanded: 'false', controls: 'nav-submenu-1' } %>
                     <ul class="hs-sub-menu list-unstyled g-mt-20--lg g-mt-10--lg--scrolling" id="nav-submenu-votation" aria-labelledby="nav-votation">
                       <% Votation.all.each do |votation| %>
-                        <li><%= link_to "#{votation.name}", votations_path(id: votation.id) %></li>
+                        <li><%# link_to "#{votation.name}", votations_path(id: votation.id) %></li>
                       <%end%>
                     </ul>
-                  </li>
+                  </li> -->
                   <li class="nav-item hs-has-sub-menu g-mx-20--lg g-mb-5 g-mb-0--lg"> 
                     <%= link_to 'Afiliados', people_path, class: 'nav-link', id: 'nav-example', 
                       aria: { haspopup: "true", expanded: 'false', controls: 'nav-submenu-1' } %>
