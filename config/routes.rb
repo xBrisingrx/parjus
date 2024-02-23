@@ -51,4 +51,5 @@ Rails.application.routes.draw do
   end
 
   root "votes#index"
+  get "reports/people_list", to: "reports#people_list"
 end
