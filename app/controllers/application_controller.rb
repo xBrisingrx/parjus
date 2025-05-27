@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-	include Authentication
-  include Authorization
-  include Language
+	# include Authentication
+  # include Authorization
+  # include Language
 end
