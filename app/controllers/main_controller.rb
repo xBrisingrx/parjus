@@ -1,6 +1,6 @@
 class MainController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:endpoint_one]
-  # skip_before_action :set_current_user, only: [:endpoint_one]
+  skip_before_action :no_login
 
   def endpoint_one
     persona = {
