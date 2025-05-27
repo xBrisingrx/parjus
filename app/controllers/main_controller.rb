@@ -21,4 +21,8 @@ class MainController < ApplicationController
 
     render json: { persona: persona, error: false }
   end
+
+  def endpoint_two
+    render json: { msg: "Crack" }
+  end
 end
